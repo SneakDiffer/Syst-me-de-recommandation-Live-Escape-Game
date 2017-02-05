@@ -13,4 +13,9 @@
 	if (class_exists('Systeme_Recommandation')) {
 		$object = new Systeme_Recommandation;
 	}
+
+	//Create the table on the database when the plugin is activate
+	register_activation_hook(__FILE__, array('Systeme_Recommandation', 'install'));
+	//Delete the table on the database if the plugin is Uninstalled
+	register_uninstall_hook(__FILE__, array('Systeme_Recommandation', 'uninstall'));
 ?>
