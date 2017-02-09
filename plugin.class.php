@@ -7,7 +7,6 @@
 
 	class Systeme_Recommandation
 	{
-		
 		public function __construct()
 		{
 			//Initialization widget
@@ -21,11 +20,15 @@
 
 		    $wpdb->query("CREATE TABLE IF NOT EXISTS {$wpdb->prefix}Recommendation_system2 (id_salle INT  PRIMARY KEY, score INT NOT NULL);");
 		   
-		    if ($file = fopen("critere.conf","w+"))
+		   	$test = fopen('/Applications/MAMP/htdocs/wordpress/wp-content/plugins/Systeme-de-recommandation-de-Live-Escape-Game/test.txt', 'a+');
+
+		    if ($file = fopen("/Applications/MAMP/htdocs/wordpress/wp-content/plugins/Systeme-de-recommandation-de-Live-Escape-Game/critere.conf","a+"))
 		    {
 		    	while(!feof($file))
 		    	{
-		    	 	$line = fgets($file);
+		    	 	$line = file_get_contents($file);
+		    	 	//$line = "coucou";
+		    	 	fputs($test, $line); // On écrit le nouveau nombre de pages vues
 		    	 	$wpdb->query("ALTER TABLE {$wpdb->prefix}Recommendation_system2 ADD $line INT;");
 		    	}
 				fclose($file);
@@ -39,5 +42,7 @@
 
 		    $wpdb->query("DROP TABLE IF EXISTS {$wpdb->prefix}Recommendation_system;");
 		}
+
+
 	}
  ?>

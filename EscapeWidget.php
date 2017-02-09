@@ -10,7 +10,21 @@
 		public function widget($args,$instance)
 		{
 			echo apply_filters('widget_title', $instance['title']);
+			?>
 
+			<html>
+<!-- 			<link rel="stylesheet" href="style.css" />
+ -->			<form>
+            
+<!-- 		<input type="range" name="ageInputName" id="ageInputId" value="50" min="1" max="100" step ="0.1" oninput="ageOutputId.value = ageInputId.value">
+ 			<output name="ageOutputName" id="ageOutputId">50</output>
+ -->		
+			<label for="zero_newsletter_email">Votre email :</label>
+			<label for="zero_newsletter_email">Votre email :</label>
+
+			</form>
+			</html>
+	    <?php
 		}
 
 		//Allows to define a title to the widget
