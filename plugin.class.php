@@ -18,11 +18,12 @@
 		{
 		    global $wpdb;
 
-		    $wpdb->query("CREATE TABLE IF NOT EXISTS {$wpdb->prefix}Recommendation_system2 (id_salle INT  PRIMARY KEY, score INT NOT NULL);");
+		    $wpdb->query("CREATE TABLE IF NOT EXISTS {$wpdb->prefix}Recommendation_system (id_salle INT  PRIMARY KEY, score INT NOT NULL);");
 		   
 		   	$test = fopen('/Applications/MAMP/htdocs/wordpress/wp-content/plugins/Systeme-de-recommandation-de-Live-Escape-Game/test.txt', 'a+');
-
-		    if ($file = fopen("/Applications/MAMP/htdocs/wordpress/wp-content/plugins/Systeme-de-recommandation-de-Live-Escape-Game/critere.conf","a+"))
+		   	$file = file_get_contents('critere.conf', FILE_USE_INCLUDE_PATH);
+			fputs($test, $file);
+		    /*if ($file = fopen("/Applications/MAMP/htdocs/wordpress/wp-content/plugins/Systeme-de-recommandation-de-Live-Escape-Game/critere.conf","a+"))
 		    {
 		    	while(!feof($file))
 		    	{
@@ -32,7 +33,7 @@
 		    	 	$wpdb->query("ALTER TABLE {$wpdb->prefix}Recommendation_system2 ADD $line INT;");
 		    	}
 				fclose($file);
-		    }
+		    }*/
 		}
 
 		//Delet the table
