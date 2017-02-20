@@ -1,10 +1,10 @@
 <?php
 
-	class Escape_widget extends WP_Widget
+	class FeedBack_widget extends WP_Widget
 	{
 		public function __construct()
 		{
-			parent::__construct('ID_Recommandation_widget','Recommandation_Widget',array('description' => 'Un widget de système de recommandation'));
+			parent::__construct('ID_FeedBack_widget','FeedBack_widget',array('description' => 'Un widget de Feed Back utilisateur'));
 		}
 
 		public function widget($args,$instance)
@@ -15,23 +15,23 @@
 			<html>
 				<table>
 					<tr>
-						<td><label>Critères </label></td>
- 						<td style="text-align:left;">Pas important</td>
- 						<td style="text-align:right;">Important</td>
+						<td><label>Salles </label></td>
+ 						<td style="text-align:left;">Faible</td>
+ 						<td style="text-align:right;">Elevé</td>
 					</tr>
 						<?php
 						global $wpdb;
-						$colum = $wpdb->get_col("DESC {$wpdb->prefix}Recommendation_system");
-						$size_array = count($colum);
-
-						for ($i = 3; $i < $size_array; $i ++)
+						$result = $wpdb->get_results( "SELECT nom_salle FROM {$wpdb->prefix}Recommendation_system");
+						$i = 0;
+                        foreach ( $result as $row ) 
 						{
-							?>
+						?>
 							<tr>
-								<td><label><?php echo $colum[$i] ?></label></td>
+								<td><label><?php echo $row->nom_salle ?></label></td>
 		                		<td colspan="2"><input type="range" id="<?php echo $i ?>ID" value="50" min="1" max="100" step ="0.1" oninput="<?php echo $i ?>Output.value = <?php echo $i ?>Input.value"></input> </td>
-		                   </tr>
+		            		</tr>
 		                   <?php
+		                   $i += 1;
 						}
 						?>
     			</table>
