@@ -9,7 +9,7 @@
 	License: GPL2
 	*/
 
-	include_once ('plugin.class.php');
+	include_once ('instanciation.php');
 	if (class_exists('Systeme_Recommandation')) {
 		$object = new Systeme_Recommandation;
 	}
