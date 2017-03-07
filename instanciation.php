@@ -20,7 +20,45 @@
 		{
 		    global $wpdb;
 
-		    $wpdb->query("CREATE TABLE IF NOT EXISTS {$wpdb->prefix}Recommendation_system (id_salle INT  PRIMARY KEY,nom_salle VARCHAR(255) NOT NULL, score INT NOT NULL);");
+		    $wpdb->query("CREATE TABLE IF NOT EXISTS {$wpdb->prefix}system_recommandation_themes
+					(
+					ID int NOT NULL AUTO_INCREMENT,
+					Name varchar(255) NOT NULL,
+					PRIMARY KEY (ID)
+					);");
+
+					$wpdb->query("CREATE TABLE  IF NOT EXISTS {$wpdb->prefix}system_recommandation_criteres
+					(
+					ID int NOT NULL 
+					AUTO_INCREMENT,
+					Name varchar(255) NOT NULL,
+					PRIMARY KEY(ID)
+					);");
+					$wpdb->query("CREATE TABLE  IF NOT EXISTS {$wpdb->prefix}system_recommandation_salles
+					(
+					ID int NOT NULL
+					AUTO_INCREMENT,
+					Name varchar(255) NOT NULL,
+					lien varchar(255),
+					id_theme int,
+					FOREIGN KEY (id_theme)
+					REFERENCES wp_system_recommandation_themes(ID),
+					PRIMARY KEY(ID)    
+					);");
+					$wpdb->query("CREATE TABLE  IF NOT EXISTS {$wpdb->prefix}system_recommandation_notes
+					(
+					ID int NOT NULL
+					AUTO_INCREMENT,
+					note int NOT NULL 
+					DEFAULT 50,
+					id_critere INT,
+					id_salle INT,
+					FOREIGN KEY (id_critere)
+					REFERENCES wp_system_recommandation_criteres(ID),
+					FOREIGN KEY (id_salle)
+					REFERENCES wp_system_recommandation_salles(ID),
+					PRIMARY KEY(ID)
+					)");
 		   
 		   	$test = fopen('/Applications/MAMP/htdocs/wordpress/wp-content/plugins/Systeme-de-recommandation-de-Live-Escape-Game/test.txt', 'a+');
 		   	$file = file_get_contents('critere.conf', FILE_USE_INCLUDE_PATH);
@@ -43,7 +81,10 @@
 		{
 		    global $wpdb;
 
-		    $wpdb->query("DROP TABLE IF EXISTS {$wpdb->prefix}Recommendation_system;");
+		    $wpdb->query("DROP TABLE IF EXISTS {$wpdb->prefix}system_recommandation_notes;");
+		    $wpdb->query("DROP TABLE IF EXISTS {$wpdb->prefix}system_recommandation_salles;");
+		    $wpdb->query("DROP TABLE IF EXISTS {$wpdb->prefix}system_recommandation_criteres;");
+		    $wpdb->query("DROP TABLE IF EXISTS {$wpdb->prefix}system_recommandation_themes;");
 		}
 
 
