@@ -37,9 +37,7 @@
 					AUTO_INCREMENT,
 					Name varchar(255) NOT NULL,
 					lien varchar(255),
-					id_theme int,
-					FOREIGN KEY (id_theme)
-					REFERENCES wp_system_recommandation_themes(ID),
+					theme varchar(516),
 					PRIMARY KEY(ID)    
 					);");
 					$wpdb->query("CREATE TABLE  IF NOT EXISTS {$wpdb->prefix}system_recommandation_notes
