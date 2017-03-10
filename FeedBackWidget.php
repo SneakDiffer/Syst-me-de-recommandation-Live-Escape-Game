@@ -10,7 +10,7 @@
 		public function widget($args,$instance)
 		{
 			echo apply_filters('widget_title', $instance['title']);
-			//Display all the criteron on the widget
+			//Display all the room on the widget
 			?>
 			<html>
 				<table>
@@ -21,13 +21,13 @@
 					</tr>
 						<?php
 						global $wpdb;
-						$result = $wpdb->get_results( "SELECT nom_salle FROM {$wpdb->prefix}Recommendation_system");
+						$result = $wpdb->get_results( "SELECT Name FROM {$wpdb->prefix}system_recommandation_salles");
 						$i = 0;
                         foreach ( $result as $row ) 
 						{
 						?>
 							<tr>
-								<td><label><?php echo $row->nom_salle ?></label></td>
+								<td><label><?php echo $row->Name ?></label></td>
 		                		<td colspan="2"><input type="range" id="<?php echo $i ?>ID" value="50" min="1" max="100" step ="0.1" oninput="<?php echo $i ?>Output.value = <?php echo $i ?>Input.value"></input> </td>
 		            		</tr>
 		                   <?php

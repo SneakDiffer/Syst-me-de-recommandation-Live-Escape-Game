@@ -21,17 +21,18 @@
 					</tr>
 						<?php
 						global $wpdb;
-						$colum = $wpdb->get_col("DESC {$wpdb->prefix}Recommendation_system");
-						$size_array = count($colum);
 
-						for ($i = 3; $i < $size_array; $i ++)
+						$result = $wpdb->get_results( "SELECT Name FROM {$wpdb->prefix}system_recommandation_criteres");
+						$i = 0;
+                        foreach ( $result as $row ) 
 						{
 							?>
 							<tr>
-								<td><label><?php echo $colum[$i] ?></label></td>
+								<td><label><?php echo $row->Name ?></label></td>
 		                		<td colspan="2"><input type="range" id="<?php echo $i ?>ID" value="50" min="1" max="100" step ="0.1" oninput="<?php echo $i ?>Output.value = <?php echo $i ?>Input.value"></input> </td>
 		                   </tr>
 		                   <?php
+		                   $i += 1;
 						}
 						?>
     			</table>

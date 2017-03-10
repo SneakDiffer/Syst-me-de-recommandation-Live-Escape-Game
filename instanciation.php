@@ -1,7 +1,4 @@
 <?php 
-	/**
-	* Plugin Main Class
-	*/
 
 	include_once ('EscapeWidget.php');
 	include_once ('FeedBackWidget.php');
@@ -59,21 +56,6 @@
 					REFERENCES wp_system_recommandation_salles(ID),
 					PRIMARY KEY(ID)
 					)");
-		   
-		   	$test = fopen('/Applications/MAMP/htdocs/wordpress/wp-content/plugins/Systeme-de-recommandation-de-Live-Escape-Game/test.txt', 'a+');
-		   	$file = file_get_contents('critere.conf', FILE_USE_INCLUDE_PATH);
-			fputs($test, $file);
-		    /*if ($file = fopen("/Applications/MAMP/htdocs/wordpress/wp-content/plugins/Systeme-de-recommandation-de-Live-Escape-Game/critere.conf","a+"))
-		    {
-		    	while(!feof($file))
-		    	{
-		    	 	$line = file_get_contents($file);
-		    	 	//$line = "coucou";
-		    	 	fputs($test, $line); // On écrit le nouveau nombre de pages vues
-		    	 	$wpdb->query("ALTER TABLE {$wpdb->prefix}Recommendation_system ADD $line INT;");
-		    	}
-				fclose($file);
-		    }*/
 		}
 
 		//Delet the table
@@ -86,7 +68,5 @@
 		    $wpdb->query("DROP TABLE IF EXISTS {$wpdb->prefix}system_recommandation_criteres;");
 		    $wpdb->query("DROP TABLE IF EXISTS {$wpdb->prefix}system_recommandation_themes;");
 		}
-
-
 	}
  ?>
