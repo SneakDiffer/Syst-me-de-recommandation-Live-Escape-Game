@@ -1,5 +1,4 @@
 <?php
-
 	class FeedBack_widget extends WP_Widget
 	{
 		public function __construct()
@@ -51,5 +50,4 @@
 			<?php
 		}
 	}
-
 ?>

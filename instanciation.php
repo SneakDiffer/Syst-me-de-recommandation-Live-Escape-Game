@@ -1,7 +1,6 @@
 <?php 
-
-	include_once ('EscapeWidget.php');
-	include_once ('FeedBackWidget.php');
+	include_once('EscapeWidget.php');
+	include_once('FeedBackWidget.php');
 
 	class Systeme_Recommandation
 	{
@@ -67,4 +66,4 @@
 		    $wpdb->query("DROP TABLE IF EXISTS {$wpdb->prefix}system_recommandation_themes;");
 		}
 	}
- ?>
+?>
