@@ -1,5 +1,6 @@
 <?php
 	/* récupérer les paramètres de la requete */
+	/* "poid[0];poid[1];...;poid[i];...;poid[nombre de critères]" */
 	$q = $_REQUEST["q"];
 	/* en faire des paramètres pour nos fonctions */
 	$listePoid = explode(";", $q);
@@ -19,8 +20,8 @@
 
 	/* retour des résultats */
 	foreach ($results as $res) {
-		/* ":SEP:nomSalle:SEP:noteSalle:SEP:lien" */
-		echo ":SEP:" . $res[2] . ":SEP:" . round($res[1]/$noteMax, 2) . ":SEP:" . $res[3] ;
+		/* ":SEP:nomSalle:SEP:noteSalle:SEP:lien:SEP:idSalle" */
+		echo ":SEP:" . $res[2] . ":SEP:" . round($res[1]/$noteMax, 2) . ":SEP:" . $res[3] . ":SEP:" . $res[0];
 	}
 	/* destruction de l'amas */
 	unset($amas);
