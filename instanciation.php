@@ -43,8 +43,8 @@
 					(
 					ID int NOT NULL
 					AUTO_INCREMENT,
-					note int NOT NULL 
-					DEFAULT 50,
+					note float NOT NULL 
+					DEFAULT 50.0,
 					id_critere INT,
 					id_salle INT,
 					FOREIGN KEY (id_critere)
