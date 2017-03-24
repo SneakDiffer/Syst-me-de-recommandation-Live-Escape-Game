@@ -195,13 +195,13 @@
 			/* si note + marge < note souhaitée */
 			if ($result[0]->note + $marge < $poid) {
 				/* augmenter la note de incrément */
-				$newNote = $result[0]->note + 1;
+				$newNote = $result[0]->note + $increment;
 				$wpdb->query("UPDATE {$wpdb->prefix}system_recommandation_notes SET note = " . $newNote . " WHERE id_salle = " . $idSalle . " AND id_critere = " . $idCritere);
 			} 
 			/* sinon si note > note souhaitée + marge */
 			elseif ($result[0]->note > $poid + $marge) {
 				/* baisser la note de incrément */
-				$newNote = $result[0]->note - 1;
+				$newNote = $result[0]->note - $increment;
 				$wpdb->query("UPDATE {$wpdb->prefix}system_recommandation_notes SET note = " . $newNote . " WHERE id_salle = " . $idSalle . " AND id_critere = " . $idCritere);
 			}
 			/* retourner la nouvelle note (debug) */
