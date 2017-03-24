@@ -1,15 +1,28 @@
 <?php
 	class agent_interface {
-		
-		public function allocation_all_salles() {
-			/* récupérer la liste des salles */
+
+		public function getListIdSalle($listeTheme) {
+			$listIdSalle = array();
+			$cur = 0;
+			/* récupérer la liste des salles en fonction des thèmes */
 			require_once('../../../wp-config.php');
 			global $wpdb;
-			$results = $wpdb->get_results( "SELECT ID FROM {$wpdb->prefix}system_recommandation_salles");
+			foreach ($listeTheme as $theme) {
+				/* récupérer les salles du thème courant */
+				$results = $wpdb->get_results( "SELECT ID FROM {$wpdb->prefix}system_recommandation_salles WHERE theme = \"" . $theme . "\"");
+				foreach ($results as $id) {
+					$listIdSalle[$cur] = $id->ID;
+					$cur++;
+				}
+			}
+			return $listIdSalle;
+		}
+		
+		public function allocation_salles($listIdSalle) {
 			$list_agent_salle = array();
 			/* pour toutes les salles */
 			$i = 0;
-			foreach ($results as $salle) {
+			foreach ($listIdSalle as $salle) {
 				/* créer un agent salle */
 				$list_agent_salle[$i] = new agent_salle;
 				$i++;
@@ -17,29 +30,34 @@
 			return $list_agent_salle;
 		}
 
-		public function agent_interface_traiter_requete($listePoid) {
-			/* créer des agents salle */
-			$list_agent_salle = $this->allocation_all_salles();
-			/* récupérer la liste des salles */
+		public function agent_interface_traiter_requete($listePoid, $listeTheme) {
 			global $wpdb;
-			$list_idSalle = $wpdb->get_results( "SELECT Name, ID FROM {$wpdb->prefix}system_recommandation_salles");
-			/* et il faudrait alors que l'on puisse apeller la fonction agent interface depuis le widget */
+			/* récupérer les id des salles concerné par les thèmes */
+			$listIdSalle = $this->getListIdSalle($listeTheme);
+			/* créer des agents salle */
+			$list_agent_salle = $this->allocation_salles($listIdSalle);
 			/* initialiser une liste de résultat */
 			$stack = array();
 			/* pour toutes les salles */
 			$i = 0;
-			foreach ( $list_idSalle as $idSalle) {
+
+			foreach ($listIdSalle as $idSalle) {
 				/* stocker la note */
-				$stack[$i] = $list_agent_salle[$i]->agent_salle_get_note_salle($idSalle->ID, $listePoid);
+				$stack[$i] = $list_agent_salle[$i]->agent_salle_get_note_salle($idSalle, $listePoid);
 				$i++;
 			}
 
 			/* ne garder que les 3 meilleurs résultat */
 			$ret_tmp = $this->agent_interface_get_three_max_res($stack);
-
+			/*$filename = "C:\instant wordpress\InstantWP_4.5\iwpserver\htdocs\wordpress\wp-content\plugins\Systeme-de-recommandation-de-Live-Escape-Game\\trace_7.txt";
+			$f = fopen($filename, 'a+');
+			foreach ($ret_tmp as $tmp) {
+				fputs($f, $tmp[0]);
+			}*/
+			//fclose($f);
 			/* construire le resultat retour */
 			$ret = array();
-			for ($j = 0; $j < 3; $j++) {
+			for ($j = 0; $j < count($ret_tmp); $j++) {
 				/* récupérer le nom et le lien de la salle courante */
 				$result = $wpdb->get_results( "SELECT Name, lien FROM {$wpdb->prefix}system_recommandation_salles WHERE ID = " . $ret_tmp[$j][0]);
 				/* les stocker */
@@ -59,26 +77,38 @@
 		public function agent_interface_get_three_max_res($results) {
 			$ret = array();
 			/* trouver les trois meilleurs résultats */
-			$nb_result = 0;
-			while ($nb_result < 3) {
-				/* trouver le meilleurs résultats */
-				$maximum = 0;
-				/* sauvegarder l'indice du max */
-				$ind_to_del = 0;
-				/* pour tout les résultats */
-				for ($i = 0; $i <= count($results); $i ++) {
-					/* si c'est un max temporaire */
-					if ($results[$i][1] > $maximum) {
-						/* sauvegarder sa valeur dans le résultat final */
-						$ret[$nb_result] = $results[$i];
-						/* sa valeur et son indice pour la suite des boucles */
-						$maximum = $results[$i][1];
-						$ind_to_del = $i;
-					}
+			if (count($results) == 1) {
+				$ret[0] = $results[0];
+			} elseif (count($results) == 1) {
+				if ($results[0][1] > $results[0][1]) {
+					$ret[0] = $results[0];
+					$ret[1] = $results[1];
+				} else {
+					$ret[0] = $results[1];
+					$ret[1] = $results[0];
 				}
-				/* supprimer la valeur max et passer au résultat suivant */
-				unset($results[$ind_to_del]);
-				$nb_result ++;
+			} else {
+			$nb_result = 0;
+				while ($nb_result < 3) {
+					/* trouver le meilleurs résultats */
+					$maximum = 0;
+					/* sauvegarder l'indice du max */
+					$ind_to_del = 0;
+					/* pour tout les résultats */
+					for ($i = 0; $i <= count($results); $i ++) {
+						/* si c'est un max temporaire */
+						if ($results[$i][1] > $maximum) {
+							/* sauvegarder sa valeur dans le résultat final */
+							$ret[$nb_result] = $results[$i];
+							/* sa valeur et son indice pour la suite des boucles */
+							$maximum = $results[$i][1];
+							$ind_to_del = $i;
+						}
+					}
+					/* supprimer la valeur max et passer au résultat suivant */
+					unset($results[$ind_to_del]);
+					$nb_result ++;
+				}
 			}
 
 			return $ret;

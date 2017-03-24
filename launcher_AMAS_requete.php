@@ -1,9 +1,27 @@
 <?php
 	/* récupérer les paramètres de la requete */
-	/* "poid[0];poid[1];...;poid[i];...;poid[nombre de critères]" */
+	/* "poid[0];poid[1];...;poid[i];...;poid[nombre de critères];;theme[0];..." */
 	$q = $_REQUEST["q"];
 	/* en faire des paramètres pour nos fonctions */
-	$listePoid = explode(";", $q);
+	$tmp = explode(";;", $q);
+
+	$listePoid = explode(";", $tmp[0]);
+	$listeTheme = explode(";", $tmp[1]);
+
+	/*$filename = "C:\instant wordpress\InstantWP_4.5\iwpserver\htdocs\wordpress\wp-content\plugins\Systeme-de-recommandation-de-Live-Escape-Game\\trace.txt";
+	$f = fopen($filename, 'a+');
+	foreach ($listeTheme as $theme) {
+		fputs($f, $theme);
+		fputs($f, "\n");
+	}
+	fclose($f);
+	$filename = "C:\instant wordpress\InstantWP_4.5\iwpserver\htdocs\wordpress\wp-content\plugins\Systeme-de-recommandation-de-Live-Escape-Game\\trace_2.txt";
+	$f = fopen($filename, 'a+');
+	foreach ($listePoid as $theme) {
+		fputs($f, $theme);
+		fputs($f, "\n");
+	}
+	fclose($f);*/
 
 	$noteMax = 0;
 	foreach ($listePoid as $poid) {
@@ -16,7 +34,7 @@
 		$amas = new agent_interface;
 	}
 	/* traiter la requete */
-	$results = $amas->agent_interface_traiter_requete($listePoid);
+	$results = $amas->agent_interface_traiter_requete($listePoid, $listeTheme);
 
 	/* retour des résultats */
 	foreach ($results as $res) {

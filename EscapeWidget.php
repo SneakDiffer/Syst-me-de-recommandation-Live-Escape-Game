@@ -16,8 +16,8 @@
 				<table id="tab_critere">
 					<tr>
 						<td><label>Critères </label></td>
- 						<td style="text-align:left;">Pas important</td>
- 						<td style="text-align:right;">Important</td>
+ 						<td >Pas important</td>
+ 						<td >Important</td>
 					</tr>
 						<?php
 						global $wpdb;
@@ -29,7 +29,7 @@
 							?>
 							<tr>
 								<td><label><?php echo $row->Name ?></label></td>
-		                		<td colspan="2"><input type="range" id="<?php echo $i ?>ID" value="50" min="1" max="100" step ="0.1" oninput="<?php echo $i ?>Output.value = <?php echo $i ?>Input.value"></input> </td>
+		                		<td colspan="2"><input type="range" style="width:200px" id="<?php echo $i ?>ID" value="50" min="1" max="100" step ="0.1" oninput="<?php echo $i ?>Output.value = <?php echo $i ?>Input.value"></input> </td>
 		                   </tr>
 		                   <?php
 		                   $i += 1;
@@ -45,41 +45,44 @@
 				      <div class="overSelect"></div>
 				    </div>
 				    <div id="checkboxes">
+				    <table id="tab_theme">
 				    <?php
 						global $wpdb;
 						$result = $wpdb->get_results( "SELECT Name FROM {$wpdb->prefix}system_recommandation_themes");
 						$i = 0;
-                        foreach ( $result as $theme ) {
+                        foreach ($result as $theme) {
 						?>
+						<tr><td>
 							<label for="<?php echo $i ?>">
-				        	<input type="checkbox" id="<?php echo $i ?>theme" /><?php echo $theme->Name ?></label>
+				        	<input type="checkbox" id="<?php echo $i ?>theme" value="<?php echo $theme->Name ?>" onclick="close_menu_deroulant()"/><?php echo $theme->Name ?></label></td></tr>
 		                   <?php
 		                   $i += 1;
 						}
 						?>
+						</table>
 				    </div>
 				  </div>
 				</form>
     			<table id="tab_expertise">
 					<tr>
-						<td>Séléctionnez votre expertise</td>
-					</tr> 
-					<tr>
-						<td><input type="range" id="id_expertise" value="50" min="1" max="100" step ="0.1" oninput="<?php echo $i ?>Output.value = <?php echo $i ?>Input.value"></input></td>
+						<td>expertise</td>
+						<td><input type="range" style="width:200px" id="id_expertise" value="50" min="1" max="100" step ="0.1" oninput="<?php echo $i ?>Output.value = <?php echo $i ?>Input.value"></input></td>
 					</tr>   				
     			</table>
     			<div style="text-align:center"> <input type="submit" value="Lancer la recherche" onclick="launch_amas_requete('<?php echo plugins_url();?>')"/> </div> 
     			<!-- tableau des résultats caché à l'instanciation-->
-    			<div style="visibility: hidden; display: none" id="div_results">
+    			<div style="visibility: hidden; display: none" id="div_results_2">
 	    			<p>Suggestions: </p> 
-	    			<table>
+	    		</div>
+	    		<div>
+	    			<table id="tab_res">
 	    				<!-- Salle / Note / Choix / lien (toujours caché) -->
-	    				<tr>
+	    				<tr id="res" style="visibility: hidden; display: none">
 	    					<td style="text-align:left;">Salle </td>
 	    					<td style="text-align:center"> Score </td>
 	    					<td style="text-align:right;">choisir</td>
 	    				</tr>
-	    				<tr>
+	    				<tr id="res_1" style="visibility: hidden; display: none">
 	    					<td style="text-align:left;" id="nomSalle_1"></td>
 	    					<td style="text-align:center" id="note_1"></td>
 	    					<!-- bouton, onclick ouvre la page du lien associé à sa ligne -->
@@ -88,7 +91,7 @@
 	    					<td style="visibility: hidden; display: none" id="lien_1"></td>
 	    					<td style="visibility: hidden; display: none" id="idSalle_1"></td>
 	    				</tr>
-	    				<tr>
+	    				<tr id="res_2" style="visibility: hidden; display: none">
 	    					<td style="text-align:left;" id="nomSalle_2"></td>
 	    					<td style="text-align:center" id="note_2"></td>
 	    					<!-- bouton, onclick ouvre la page du lien associé à sa ligne -->
@@ -97,7 +100,7 @@
 	    					<td style="visibility: hidden; display: none" id="lien_2"></td>
 	    					<td style="visibility: hidden; display: none" id="idSalle_2"></td>
 	    				</tr>
-	    				<tr>
+	    				<tr id="res_3" style="visibility: hidden; display: none">
 	    					<td style="text-align:left;" id="nomSalle_3"></td>
 	    					<td style="text-align:center" id="note_3"></td>
 	    					<!-- bouton, onclick ouvre la page du lien associé à sa ligne -->
@@ -107,6 +110,7 @@
 	    					<td style="visibility: hidden; display: none" id="idSalle_3"></td>
 	    				</tr>
 	    			</table>
+	    		<div style="visibility: hidden; display: none" id="div_results">
 	    			<p style="text-align:center;"><input type="submit" value="Choisir cette salle" onclick="launch_amas_feedback_choice('<?php echo plugins_url();?>')"/></p>
 	    			<p id="retour_feedback"></p>
 	    			<p id="log"></p>
