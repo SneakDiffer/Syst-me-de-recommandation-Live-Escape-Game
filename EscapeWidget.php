@@ -36,6 +36,30 @@
 						}
 						?>
     			</table>
+				<form>
+				  <div class="multiselect">
+				    <div class="selectBox" onclick="showCheckboxes()">
+				      <select>
+				        <option>Selectionnez vos thèmes</option>
+				      </select>
+				      <div class="overSelect"></div>
+				    </div>
+				    <div id="checkboxes">
+				    <?php
+						global $wpdb;
+						$result = $wpdb->get_results( "SELECT Name FROM {$wpdb->prefix}system_recommandation_themes");
+						$i = 0;
+                        foreach ( $result as $theme ) {
+						?>
+							<label for="<?php echo $i ?>">
+				        	<input type="checkbox" id="<?php echo $i ?>theme" /><?php echo $theme->Name ?></label>
+		                   <?php
+		                   $i += 1;
+						}
+						?>
+				    </div>
+				  </div>
+				</form>
     			<table id="tab_expertise">
 					<tr>
 						<td>Séléctionnez votre expertise</td>
