@@ -60,4 +60,3 @@ class configuration_plugin {
 		<?php
 	}
 }
-?>

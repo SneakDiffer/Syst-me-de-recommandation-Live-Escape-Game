@@ -66,4 +66,3 @@
 		    $wpdb->query("DROP TABLE IF EXISTS {$wpdb->prefix}system_recommandation_themes;");
 		}
 	}
-?>

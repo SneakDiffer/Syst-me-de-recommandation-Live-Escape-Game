@@ -1,7 +1,7 @@
 <?php
 	class agent_interface {
 		
-		public function alloc() {
+		public function allocation_all_salles() {
 			/* récupérer la liste des salles */
 			require_once('../../../wp-config.php');
 			global $wpdb;
@@ -19,7 +19,7 @@
 
 		public function agent_interface_traiter_requete($listePoid) {
 			/* créer des agents salle */
-			$list_agent_salle = $this->alloc();
+			$list_agent_salle = $this->allocation_all_salles();
 			/* récupérer la liste des salles */
 			global $wpdb;
 			$list_idSalle = $wpdb->get_results( "SELECT Name, ID FROM {$wpdb->prefix}system_recommandation_salles");
@@ -83,11 +83,42 @@
 
 			return $ret;
 		}
+
+		public function agent_interface_traiter_feedback_choix($idSalle_choisie, $expertise, $listePoid, $idSalleProposees) {
+			/* calcul d'une marge dynamique */
+			$marge = $this->agent_interface_get_dynamix_marge($expertise);
+			/* allocation des agents salles choisie */
+			//$list_agent_salle = $this->allocation_salle_ciblee($idSalleProposees);
+			/* allocation de l'agent salle choisie */
+			$agent_salle = new agent_salle;
+			/* appel de l'agent salle pour modifier les notes */
+			$ret = $agent_salle->agent_salle_modify_note_salle($idSalle_choisie, $listePoid, $expertise, $marge);
+			/* détruire l'agent salle */
+			unset($agent_salle);
+			/* retourner les nouvelles notes (debug) */
+			return $ret;
+		}
+
+		public function allocation_salle_ciblee($list_idSalle) {
+			$list_agent_salle = array();
+			$i = 0;
+			foreach ($list_idSalle as $idSalle) {
+				$list_agent_salle[$i] = new agent_salle;
+				$i++;
+			}
+			return $list_agent_salle;
+		}
+
+		public function agent_interface_get_dynamix_marge($expertise) {
+			/* retourne une marge entre 10 et 20 selon l'expertise */
+			return 20 - ($expertise / 10);
+		}
 	}
 
 	class agent_salle {
-		public function alloc() {
+		public function allocation_all_criteres() {
 			/* récupérer la liste des critères */
+			require_once('../../../wp-config.php');
 			global $wpdb;
 			$list_critere = $wpdb->get_results("SELECT ID FROM {$wpdb->prefix}system_recommandation_criteres");
 			$list_agent_critere = array();
@@ -103,7 +134,7 @@
 
 		public function agent_salle_get_note_salle($idSalle, $listePoid) {
 			/* créer les agents critère */
-			$list_agent_critere = $this->alloc();
+			$list_agent_critere = $this->allocation_all_criteres();
 			/* récupérer la liste des critères */
 			global $wpdb;
 			$results = $wpdb->get_results("SELECT ID FROM {$wpdb->prefix}system_recommandation_criteres");
@@ -123,6 +154,27 @@
 			/* retourner la note calculé et le nom de la salle */
 			return $ret;
 		}
+
+		public function agent_salle_modify_note_salle($idSalle, $listePoid, $expertise, $marge) {
+			/* créer les agents critère */
+			$list_agent_critere = $this->allocation_all_criteres(); 
+			/* récupérer la liste des critères */
+			global $wpdb;
+			$idCritere = $wpdb->get_results("SELECT ID FROM {$wpdb->prefix}system_recommandation_criteres");
+			/* pour tout les critères */
+			$i = 0;
+			$ret = "";
+			/* pour tout les critères */
+			foreach ($list_agent_critere as $agent_critere) {
+				/* appel de l'agent critères pour modifier sa notes au besoin */
+				$newNote = $agent_critere->agent_critere_modify_note($idSalle, $idCritere[$i]->ID, $listePoid[$i], $marge, $expertise);
+				/* stockage de la nouvelle note */
+				$ret = $ret . ":SEP:" . $newNote;
+				$i++;
+			}
+			/* retourner les nouvelles notes (debug) */
+			return $ret;
+		}
 	}
 
 	class agent_critere {
@@ -132,5 +184,27 @@
 			/* retourner la note modulé par le poid */
 			return $result[0]->note * $poid; 
 		}
+
+		public function agent_critere_modify_note($idSalle, $idCritere, $poid, $marge, $expertise) {
+			/* incrément dynamique selon l'expertise */
+			$increment = 1 * ($expertise / 100);
+			/* récupérer la note actuelle du critère */
+			global $wpdb;
+			$result = $wpdb->get_results("SELECT note FROM {$wpdb->prefix}system_recommandation_notes WHERE id_salle = " . $idSalle . " AND id_critere = " . $idCritere);
+			$newNote = $result[0]->note;
+			/* si note + marge < note souhaitée */
+			if ($result[0]->note + $marge < $poid) {
+				/* augmenter la note de incrément */
+				$newNote = $result[0]->note + 1;
+				$wpdb->query("UPDATE {$wpdb->prefix}system_recommandation_notes SET note = " . $newNote . " WHERE id_salle = " . $idSalle . " AND id_critere = " . $idCritere);
+			} 
+			/* sinon si note > note souhaitée + marge */
+			elseif ($result[0]->note > $poid + $marge) {
+				/* baisser la note de incrément */
+				$newNote = $result[0]->note - 1;
+				$wpdb->query("UPDATE {$wpdb->prefix}system_recommandation_notes SET note = " . $newNote . " WHERE id_salle = " . $idSalle . " AND id_critere = " . $idCritere);
+			}
+			/* retourner la nouvelle note (debug) */
+			return $newNote;
+		}
 	}
-?>

@@ -5,14 +5,14 @@
 	/* en faire des paramètres pour nos fonctions */
 	$param = explode(";", $q);
 	/* et les stocker */
-	$choix = $param[0];
+	$numChoix = $param[0];
 	$idSalle_choisie = $param[1];
 	$expertise = $param[2];
 	/* les propositions fournies à l'utilisateur */
 	$idSalleProposees = array();
-	$idSalleProposees[0] = $param[3];
-	$idSalleProposees[1] = $param[5];
-	$idSalleProposees[2] = $param[7];
+	$idSalleProposees[0] = $param[4];
+	$idSalleProposees[1] = $param[6];
+	$idSalleProposees[2] = $param[8];
 	/* liste des poids sur critères */
 	$listePoid = array();
 	$current = 0;
@@ -20,17 +20,27 @@
 		$listePoid[$current] = $param[$j];
 		$current++;
 	}
+	
+	/*$filename = "C:\instant wordpress\InstantWP_4.5\iwpserver\htdocs\wordpress\wp-content\plugins\Systeme-de-recommandation-de-Live-Escape-Game\\trace_2.txt";
+	$f = fopen($filename, 'a+');
+	foreach ($listePoid as $p) {
+		fputs($f, $p);
+		fputs($f, "\n");
+	}
+	fclose($f);*/
 
-	/* inclure le fichier pour créer un amas */
-	include_once ('AMAS_plugin.php');
 	/* si choix 1 : OK, pas de modification à faire */
-	if ($choix == "1") {
-		echo "Pas de modification de la BDD";
+	if ($numChoix == "1") {
+		echo "L'intelligence artificelle ne modifie pas les notes";
 	} 
-	elseif ($choix == "2") { /* on va modifier la base de données */
-		// todo
+	else { /* on va modifier la base de données */
+		/* inclure le fichier pour créer un amas */
+		include_once ('AMAS_plugin.php');
+			if (class_exists('agent_interface')) {
+			$amas = new agent_interface;
+		}
+		/* traiter la requete */
+		$ret = $amas->agent_interface_traiter_feedback_choix($idSalle_choisie, $expertise, $listePoid, $idSalleProposees);
+		echo "L'intelligence artificelle modifie les notes " . $ret;
+		unset($amas);
 	}
-	elseif ($choix == "3") { /* on va modifier la base de données */
-		// todo
-	}
-?>

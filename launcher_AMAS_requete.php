@@ -25,4 +25,3 @@
 	}
 	/* destruction de l'amas */
 	unset($amas);
-?>
