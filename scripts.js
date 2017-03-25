@@ -1,17 +1,4 @@
 function launch_amas_requete(path) {
-	/* récupérer le bloc de résultats */
-	//var page = document.getElementById("div_results");
-	/* le rendre visible */
-	//page.style.display='block';
-	//page.style.visibility='visible';
-	//var page = document.getElementById("div_results_2");
-	/* le rendre visible */
-	//page.style.display='block';
-	//page.style.visibility='visible';
-	//var page = document.getElementById("res");
-	/* le rendre visible */
-	//page.style.display='block';
-	//page.style.visibility='visible';
 	/* créer une requete */
 	var xhttp;
 	if (window.XMLHttpRequest) {
@@ -184,3 +171,14 @@ function close_menu_deroulant() {
 	checkboxes.style.display = "none";
 	expanded = false;
 }
+
+function choix_Salle() {
+	document.getElementById("id_saisieNote").style.visibility = 'visible';
+	document.getElementById("id_saisieNote").style.display = 'block';
+	document.getElementById("choix_salle").style.visibility = 'hidden';
+	document.getElementById("choix_salle").style.display = 'none';
+	var selectBox = document.getElementById("selectBox");
+	var selectedValue = selectBox.options[selectBox.selectedIndex].value;
+	document.getElementById("selected_salle").innerHTML = "Veuillez noter " + selectedValue;
+}
+

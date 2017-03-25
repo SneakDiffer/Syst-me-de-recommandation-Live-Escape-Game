@@ -25,7 +25,7 @@
 	$path_to_style = $path . "/Systeme-de-recommandation-de-Live-Escape-Game/style.css";
 	// add the custom scripts to the widget  
 	wp_enqueue_script('scripts.js', $path_to_scripts);
-	wp_enqueue_style('style', $path_to_style);
+	wp_enqueue_style('style.css', $path_to_style);
 	//Create the table on the database when the plugin is activate
 	register_activation_hook(__FILE__, array('Systeme_Recommandation', 'install'));
 	//Delete the table on the database if the plugin is Uninstalled

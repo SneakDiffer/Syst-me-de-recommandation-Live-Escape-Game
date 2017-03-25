@@ -2,6 +2,10 @@
 	border-bottom: 1px solid #ddd;
 }
 
+#tab_saisieNote table, #tab_saisieNote th, #tab_saisieNote td {
+	border-bottom: 1px solid #ddd;
+}
+
 #tab_res table, #tab_res th, #tab_res td {
 	width: 150px;
 	height: 10px;
