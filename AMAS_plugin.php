@@ -7,12 +7,19 @@
 			/* récupérer la liste des salles en fonction des thèmes */
 			require_once('../../../wp-config.php');
 			global $wpdb;
-			foreach ($listeTheme as $theme) {
-				/* récupérer les salles du thème courant */
-				$results = $wpdb->get_results( "SELECT ID FROM {$wpdb->prefix}system_recommandation_salles WHERE theme = \"" . $theme . "\"");
-				foreach ($results as $id) {
-					$listIdSalle[$cur] = $id->ID;
-					$cur++;
+			$list_salle = $wpdb->get_results( "SELECT ID, theme FROM {$wpdb->prefix}system_recommandation_salles");
+			/* pour toute les salles */
+			foreach ($list_salle as $salle) {
+				/* récupérer les thèmes de la salles courantes */
+				$list_themes = explode(";",$salle->theme);
+				/* pour tout les thèmes de la salle */
+				foreach ($list_themes as $theme) {
+					if (in_array($theme, $listeTheme)) {
+						if (!in_array($salle->ID, $listIdSalle)) {
+							$listIdSalle[$cur] = $salle->ID;
+							$cur++;
+						}
+					}
 				}
 			}
 			return $listIdSalle;
