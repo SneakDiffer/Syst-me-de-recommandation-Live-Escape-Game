@@ -1,4 +1,5 @@
 function launch_amas_requete(path) {
+	reset_affichage();
 	/* créer une requete */
 	var xhttp;
 	if (window.XMLHttpRequest) {
@@ -25,25 +26,39 @@ function launch_amas_requete(path) {
 	var nb_theme = document.getElementById("tab_theme").rows.length - 1;
 	/* et créer le paramètre de la requete php */
 	var theme = "";
-	for (var i = 0; i < nb_criteres;i++) {
+	for (var i = 0; i < nb_theme;i++) {
 		if (document.getElementById(i+"theme").checked) {
 			theme += document.getElementById(i+"theme").value+";";
 		}
 	}
 	/* créer la requete php : path + nomPlugin + nomFichier + parametre */
 	var requete = path + "/Systeme-de-recommandation-de-Live-Escape-Game/launcher_AMAS_requete.php?q=" + poid + ";" + theme;
-	//document.getElementById("log").innerHTML = requete;
 	/* envoyer la requete php */
 	xhttp.open("GET", requete, true);
 	xhttp.send();
 }
 
+function reset_affichage() {
+	document.getElementById("nomSalle_1").innerHTML = "";
+	document.getElementById("note_1").innerHTML = "";
+	document.getElementById("lien_1").innerHTML = "";
+	document.getElementById("idSalle_1").innerHTML = "";
+	document.getElementById("nomSalle_2").innerHTML = "";
+	document.getElementById("note_2").innerHTML = "";
+	document.getElementById("lien_2").innerHTML = "";
+	document.getElementById("idSalle_2").innerHTML = "";
+	document.getElementById("nomSalle_3").innerHTML = "";
+	document.getElementById("note_3").innerHTML = "";
+	document.getElementById("lien_3").innerHTML = "";
+	document.getElementById("idSalle_3").innerHTML = "";
+	document.getElementById("div_results_2").innerHTML = "";
+}
+
 function affiche_resultat_amas(responseText) {
 	/* récupérer la réponse et split sur ':SEP: */
 	var res = responseText.split(':SEP:');
-	//document.getElementById("log").innerHTML = res.length;
 	/* mettre à jours l'affichage des résultats */
-	if (res.length == 5) {
+	if (res.length >= 5) {
 		document.getElementById("div_results_2").style.visibility = 'visible';
 		document.getElementById("div_results_2").style.display = 'block';
 		document.getElementById("res").style.visibility = 'visible';
@@ -60,7 +75,7 @@ function affiche_resultat_amas(responseText) {
 		document.getElementById("res_1").style.visibility = 'hidden';
 		document.getElementById("res_1").style.display = 'none';
 	}
-	if (res.length == 9) {
+	if (res.length >= 9) {
 		document.getElementById("res_2").style.visibility = 'visible';
 		document.getElementById("res_2").style.display = 'block';
 		document.getElementById("nomSalle_2").innerHTML = res[5];
@@ -71,7 +86,7 @@ function affiche_resultat_amas(responseText) {
 		document.getElementById("res_2").style.visibility = 'hidden';
 		document.getElementById("res_2").style.display = 'none';
 	}
-	if (res.length == 13) {
+	if (res.length >= 13) {
 		document.getElementById("res_3").style.visibility = 'visible';
 		document.getElementById("res_3").style.display = 'block';
 		document.getElementById("nomSalle_3").innerHTML = res[9];
@@ -89,7 +104,23 @@ function affiche_resultat_amas(responseText) {
 	}
 }
 
+function hide_result() {
+	document.getElementById("div_results").style.visibility = 'hidden';
+	document.getElementById("div_results").style.display = 'none';
+	document.getElementById("div_results_2").style.visibility = 'hidden';
+	document.getElementById("div_results_2").style.display = 'none';
+	document.getElementById("res").style.visibility = 'hidden';
+	document.getElementById("res").style.display = 'none';
+	document.getElementById("res_1").style.visibility = 'hidden';
+	document.getElementById("res_1").style.display = 'none';
+	document.getElementById("res_2").style.visibility = 'hidden';
+	document.getElementById("res_2").style.display = 'none';
+	document.getElementById("res_3").style.visibility = 'hidden';
+	document.getElementById("res_3").style.display = 'none';
+}
+
 function launch_amas_feedback_choice(path) {
+	hide_result();
 	/* récupérer les radio bouton */
 	var radio_buton_choice = document.getElementsByName("radio_buton_choice");
 	/* trouver le choix de l'utilisateur */
@@ -130,20 +161,16 @@ function launch_amas_feedback_choice(path) {
 	xhttp.onreadystatechange = function() {
 		/* si la réponse est correcte */
 		if (this.readyState == 4 && this.status == 200) {
-			document.getElementById("retour_feedback").innerHTML = this.responseText;
+			//document.getElementById("retour_feedback").innerHTML = this.responseText;
 			///* récupérer le bloc de résultats */
-			//var page = document.getElementById("div_results");
-			/* le rendre visible */
-			//page.style.display='none';
-			//page.style.visibility='hidden';
 			/*
 			pb. si on met ca ici. l'utilisateur peut encore cliquer sur les autre choix 
 			tant que l'alert n'est pas levé. */
-			if (choix == 1) {
+			/*if (choix == 1) {
 				newPage.alert("L'intelligence artificielle ne modifie pas les notes");
 			} else {
 				newPage.alert("L'intelligence artificielle modifie les notes");
-			}
+			}*/
 		}
 	};
 	/* créer la requete php : path + nomPlugin + nomFichier + parametre */

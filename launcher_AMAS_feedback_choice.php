@@ -31,7 +31,7 @@
 
 	/* si choix 1 : OK, pas de modification à faire */
 	if ($numChoix == "1") {
-		echo "L'intelligence artificelle ne modifie pas les notes";
+		echo "";
 	} 
 	else { /* on va modifier la base de données */
 		/* inclure le fichier pour créer un amas */
@@ -41,6 +41,6 @@
 		}
 		/* traiter la requete */
 		$ret = $amas->agent_interface_traiter_feedback_choix($idSalle_choisie, $expertise, $listePoid, $idSalleProposees);
-		echo "L'intelligence artificelle modifie les notes " . $ret;
+		echo "";
 		unset($amas);
 	}

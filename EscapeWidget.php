@@ -54,7 +54,7 @@
 						?>
 						<tr><td>
 							<label for="<?php echo $i ?>">
-				        	<input type="checkbox" id="<?php echo $i ?>theme" value="<?php echo $theme->Name ?>" onclick="close_menu_deroulant()"/><?php echo $theme->Name ?></label></td></tr>
+				        	<input type="checkbox" id="<?php echo $i ?>theme" value="<?php echo utf8_encode($theme->Name) ?>" onclick="close_menu_deroulant()"/><?php echo $theme->Name ?></label></td></tr>
 		                   <?php
 		                   $i += 1;
 						}
@@ -110,10 +110,10 @@
 	    					<td style="visibility: hidden; display: none" id="idSalle_3"></td>
 	    				</tr>
 	    			</table>
-	    		<div style="visibility: hidden; display: none" id="div_results">
+	    		<div id="div_results" style="visibility: hidden; display: none">
 	    			<p style="text-align:center;"><input type="submit" value="Choisir cette salle" onclick="launch_amas_feedback_choice('<?php echo plugins_url();?>')"/></p>
 	    			<p id="retour_feedback"></p>
-	    			<p id="log"></p>
+	    			<p id="loggeur"></p>
 	    		</div>
 			</html>
 	    <?php
