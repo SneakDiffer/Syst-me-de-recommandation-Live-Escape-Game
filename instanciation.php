@@ -30,6 +30,7 @@
 					Name varchar(255) NOT NULL,
 					PRIMARY KEY(ID)
 					);");
+
 					$wpdb->query("CREATE TABLE  IF NOT EXISTS {$wpdb->prefix}system_recommandation_salles
 					(
 					ID int NOT NULL
@@ -39,6 +40,7 @@
 					theme varchar(516),
 					PRIMARY KEY(ID)    
 					);");
+
 					$wpdb->query("CREATE TABLE  IF NOT EXISTS {$wpdb->prefix}system_recommandation_notes
 					(
 					ID int NOT NULL
@@ -53,6 +55,14 @@
 					REFERENCES wp_system_recommandation_salles(ID),
 					PRIMARY KEY(ID)
 					)");
+
+					$wpdb->query("CREATE TABLE  IF NOT EXISTS {$wpdb->prefix}system_recommandation_log_feedback_choix
+					(
+					ID int NOT NULL AUTO_INCREMENT,
+					Date varchar(64) NOT NULL,
+					IP varchar(64) NOT NULL,
+					PRIMARY KEY(ID)
+					);");
 		}
 
 		//Delet the table
@@ -64,5 +74,6 @@
 		    $wpdb->query("DROP TABLE IF EXISTS {$wpdb->prefix}system_recommandation_salles;");
 		    $wpdb->query("DROP TABLE IF EXISTS {$wpdb->prefix}system_recommandation_criteres;");
 		    $wpdb->query("DROP TABLE IF EXISTS {$wpdb->prefix}system_recommandation_themes;");
+		    $wpdb->query("DROP TABLE IF EXISTS {$wpdb->prefix}system_recommandation_log_feedback_choix;");
 		}
 	}

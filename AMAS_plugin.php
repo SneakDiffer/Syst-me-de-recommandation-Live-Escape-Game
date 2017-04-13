@@ -122,6 +122,7 @@
 		}
 
 		public function agent_interface_traiter_feedback_choix($idSalle_choisie, $expertise, $listePoid, $idSalleProposees) {
+			$ok = $this->agent_interface_log_feedback_choix($idSalle_choisie);
 			/* calcul d'une marge dynamique */
 			$marge = $this->agent_interface_get_dynamix_marge($expertise);
 			/* allocation des agents salles choisie */
@@ -134,6 +135,16 @@
 			unset($agent_salle);
 			/* retourner les nouvelles notes (debug) */
 			return $ret;
+		}
+
+		public function agent_interface_log_feedback_choix($idSalle_choisie) {
+			require_once('../../../wp-config.php');
+			global $wpdb;
+			$ip = $this->GetIP();
+			$d = getdate();
+			$date = $d['mday'] . "." . $d['mon'] . "." . $d['year'] . "-" . $d['hours'] . ":" . $d['minutes'] . ":" . $d['seconds'];
+			$wpdb->insert('wp_system_recommandation_log_feedback_choix', array('ID' => NULL, 'Date' => $date, 'IP' => $ip), array('%d','%s','%s'));
+			return true;
 		}
 
 		public function allocation_salle_ciblee($list_idSalle) {
@@ -149,6 +160,18 @@
 		public function agent_interface_get_dynamix_marge($expertise) {
 			/* retourne une marge entre 10 et 20 selon l'expertise */
 			return 20 - ($expertise / 10);
+		}
+
+		public function GetIP() {
+		    foreach (array('HTTP_CLIENT_IP', 'HTTP_X_FORWARDED_FOR', 'HTTP_X_FORWARDED', 'HTTP_X_CLUSTER_CLIENT_IP', 'HTTP_FORWARDED_FOR', 'HTTP_FORWARDED', 'REMOTE_ADDR') as $key) {
+		        if (array_key_exists($key, $_SERVER) === true) {
+		            foreach (array_map('trim', explode(',', $_SERVER[$key])) as $ip) {
+		                if (filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE) !== false) {
+		                    return $ip;
+		                }
+		            }
+		        }
+		    }
 		}
 	}
 
