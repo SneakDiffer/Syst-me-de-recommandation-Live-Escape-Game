@@ -13,11 +13,11 @@
 			?>
 			<html>
 			<script type="text/javascript" src="/scripts.js"></script>
-				<table id="tab_critere">
+				<table id="tab_critere" style="width:100%">
 					<tr>
 						<td><label>Critères </label></td>
- 						<td >Pas important</td>
- 						<td >Important</td>
+ 						<td style="text-align:left">Pas important</td>
+ 						<td style="text-align:right">Important</td>
 					</tr>
 						<?php
 						global $wpdb;
@@ -29,7 +29,7 @@
 							?>
 							<tr>
 								<td><label><?php echo $row->Name ?></label></td>
-		                		<td colspan="2"><input type="range" style="width:200px" id="<?php echo $i ?>ID" value="50" min="1" max="100" step ="0.1" oninput="<?php echo $i ?>Output.value = <?php echo $i ?>Input.value"></input> </td>
+		                		<td colspan="2"><input type="range" id="<?php echo $i ?>ID" value="50" min="1" max="100" step ="0.1" oninput="<?php echo $i ?>Output.value = <?php echo $i ?>Input.value"></input> </td>
 		                   </tr>
 		                   <?php
 		                   $i += 1;
@@ -63,10 +63,11 @@
 				    </div>
 				  </div>
 				</form>
-    			<table id="tab_expertise">
+    			<table id="tab_expertise" style="width:100%">
+    			<tr><td>expertise</td><td style="text-align:left">faible</td><td style="text-align:right">elevée</td></tr>
 					<tr>
 						<td>expertise</td>
-						<td><input type="range" style="width:200px" id="id_expertise" value="50" min="1" max="100" step ="0.1" oninput="<?php echo $i ?>Output.value = <?php echo $i ?>Input.value"></input></td>
+						<td colspan="2"><input type="range" id="id_expertise" value="50" min="1" max="100" step ="0.1" oninput="<?php echo $i ?>Output.value = <?php echo $i ?>Input.value"></input></td>
 					</tr>   				
     			</table>
     			<div style="text-align:center"> <input type="submit" value="Lancer la recherche" onclick="launch_amas_requete('<?php echo plugins_url();?>')"/> </div> 
