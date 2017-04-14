@@ -30,7 +30,7 @@
 
 	/* si choix 1 : OK, pas de modification à faire */
 	if ($numChoix == "1") {
-		echo "";
+		echo "RAS";
 	} 
 	else { /* on va modifier la base de données */
 		/* inclure le fichier pour créer un amas */
@@ -40,6 +40,6 @@
 		}
 		/* traiter la requete */
 		$ret = $amas->agent_interface_traiter_feedback_choix($idSalle_choisie, $expertise, $listePoid, $idSalleProposees);
-		echo "";
+		echo $ret;
 		unset($amas);
 	}

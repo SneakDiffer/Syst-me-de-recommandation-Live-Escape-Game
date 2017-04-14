@@ -7,6 +7,8 @@
 			/* récupérer la liste des salles en fonction des thèmes */
 			require_once('../../../wp-config.php');
 			global $wpdb;
+			//$filename = "C:\instant wordpress\InstantWP_4.5\iwpserver\htdocs\wordpress\wp-content\plugins\Systeme-de-recommandation-de-Live-Escape-Game\\trace.txt";
+			//$f = fopen($filename, 'a+');
 			$list_salle = $wpdb->get_results( "SELECT ID, theme FROM {$wpdb->prefix}system_recommandation_salles");
 			/* pour toute les salles */
 			foreach ($list_salle as $salle) {
@@ -18,10 +20,13 @@
 						if (!in_array($salle->ID, $listIdSalle)) {
 							$listIdSalle[$cur] = $salle->ID;
 							$cur++;
+							//fputs($f, $salle->ID);
+							//fputs($f, "\n");
 						}
 					}
 				}
 			}
+			//fclose($f);
 			return $listIdSalle;
 		}
 		
@@ -47,26 +52,18 @@
 			$stack = array();
 			/* pour toutes les salles */
 			$i = 0;
-
 			foreach ($listIdSalle as $idSalle) {
 				/* stocker la note */
 				$stack[$i] = $list_agent_salle[$i]->agent_salle_get_note_salle($idSalle, $listePoid);
 				$i++;
 			}
-
 			/* ne garder que les 3 meilleurs résultat */
 			$ret_tmp = $this->agent_interface_get_three_max_res($stack);
-			/*$filename = "C:\instant wordpress\InstantWP_4.5\iwpserver\htdocs\wordpress\wp-content\plugins\Systeme-de-recommandation-de-Live-Escape-Game\\trace_7.txt";
-			$f = fopen($filename, 'a+');
-			foreach ($ret_tmp as $tmp) {
-				fputs($f, $tmp[0]);
-			}*/
-			//fclose($f);
 			/* construire le resultat retour */
 			$ret = array();
 			for ($j = 0; $j < count($ret_tmp); $j++) {
 				/* récupérer le nom et le lien de la salle courante */
-				$result = $wpdb->get_results( "SELECT Name, lien FROM {$wpdb->prefix}system_recommandation_salles WHERE ID = " . $ret_tmp[$j][0]);
+				$result = $wpdb->get_results("SELECT Name, lien FROM {$wpdb->prefix}system_recommandation_salles WHERE ID = " . $ret_tmp[$j][0]);
 				/* les stocker */
 				$ret[$j] = array();
 				$ret[$j][0] = $ret_tmp[$j][0];
@@ -74,10 +71,9 @@
 				$ret[$j][2] = $result[0]->Name;
 				$ret[$j][3] = $result[0]->lien;
 			}
-
 			/* détruire les agents de salles */
 			unset($list_agent_salle);
-			/* retourner la liste trié contenant 3 tuples (idSalle, note) */
+			/* retourner la liste trié contenant 3 tuples (idSalle, note, nom, lien) */
 			return $ret;
 		}
 
@@ -122,29 +118,57 @@
 		}
 
 		public function agent_interface_traiter_feedback_choix($idSalle_choisie, $expertise, $listePoid, $idSalleProposees) {
-			$ok = $this->agent_interface_log_feedback_choix($idSalle_choisie);
-			/* calcul d'une marge dynamique */
-			$marge = $this->agent_interface_get_dynamix_marge($expertise);
-			/* allocation des agents salles choisie */
-			//$list_agent_salle = $this->allocation_salle_ciblee($idSalleProposees);
-			/* allocation de l'agent salle choisie */
-			$agent_salle = new agent_salle;
-			/* appel de l'agent salle pour modifier les notes */
-			$ret = $agent_salle->agent_salle_modify_note_salle($idSalle_choisie, $listePoid, $expertise, $marge);
-			/* détruire l'agent salle */
-			unset($agent_salle);
-			/* retourner les nouvelles notes (debug) */
-			return $ret;
+			$nb_Max_Feedback_par_jour = 2;
+			$nb_feedback = $this->agent_interface_log_feedback_choix($idSalle_choisie);
+			if ($nb_feedback < $nb_Max_Feedback_par_jour) {
+				/* calcul d'une marge dynamique */
+				$marge = $this->agent_interface_get_dynamix_marge($expertise);
+				/* allocation des agents salles choisie */
+				//$list_agent_salle = $this->allocation_salle_ciblee($idSalleProposees);
+				/* allocation de l'agent salle choisie */
+				$agent_salle = new agent_salle;
+				/* appel de l'agent salle pour modifier les notes */
+				$ret = $agent_salle->agent_salle_modify_note_salle($idSalle_choisie, $listePoid, $expertise, $marge);
+				/* détruire l'agent salle */
+				unset($agent_salle);
+				/* retourner les nouvelles notes (debug) */
+				return "RAS";
+			} else {
+				return "";
+			}
 		}
 
 		public function agent_interface_log_feedback_choix($idSalle_choisie) {
 			require_once('../../../wp-config.php');
 			global $wpdb;
+			/* récupérer l'ip */
 			$ip = $this->GetIP();
+			/* et la date */
 			$d = getdate();
 			$date = $d['mday'] . "." . $d['mon'] . "." . $d['year'] . "-" . $d['hours'] . ":" . $d['minutes'] . ":" . $d['seconds'];
-			$wpdb->insert('wp_system_recommandation_log_feedback_choix', array('ID' => NULL, 'Date' => $date, 'IP' => $ip), array('%d','%s','%s'));
-			return true;
+			/* inserer dans la BDD une nouvelle ligne pour log le feedback */
+			$wpdb->insert('wp_system_recommandation_log_feedback_choix', array('ID'=>NULL, 'id_salle'=>$idSalle_choisie, 'Date'=>$date, 'IP'=>$ip), array('%d','%s','%s','%s'));
+			/* savoir combien de fois cet utilisateur à utilisé le feedback */
+			$result = $wpdb->get_results("SELECT * FROM wp_system_recommandation_log_feedback_choix");
+			$nb_feedback = 0;
+			/* pour chaque resultat */ 
+			foreach ($result as $feedback) {
+				/* si c'est l'ip de l'utilisateur */
+				if ($feedback->IP == $ip) {
+					/* si c'est la salle concernée */
+					if ($feedback->id_salle == $idSalle_choisie) {
+						/* récupérer la date */
+						$tmp = explode("-", $feedback->Date);
+						/* récupérer les jours mois année */
+						$tmp2 = explode(".", $tmp[0]);
+						/* compter le nombre de feedback du jour */
+						if ($tmp2[0] == $d['mday'] && $tmp2[1] == $d['mon'] && $tmp2[2] == $d['year']) {
+							$nb_feedback++;
+						}
+					}
+				}
+			}
+			return $nb_feedback; 
 		}
 
 		public function allocation_salle_ciblee($list_idSalle) {

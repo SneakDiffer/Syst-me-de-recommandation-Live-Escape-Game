@@ -13,6 +13,9 @@
 			?>
 			<html>
 			<script type="text/javascript" src="/scripts.js"></script>
+				<div class="tooltip">Aide
+  					<span class="tooltiptext">- Renseignez les poids sur critères <br>- Selectionnez les thèmes<br>- Renseignez votre expertise<br>- Lancer la recherche</span>
+				</div>
 				<table id="tab_critere" style="width:100%">
 					<tr>
 						<td><label>Critères </label></td>
@@ -114,8 +117,8 @@
 	    		<div id="div_results" style="visibility: hidden; display: none">
 	    			<p style="text-align:center;"><input type="submit" value="Choisir cette salle" onclick="launch_amas_feedback_choice('<?php echo plugins_url();?>')"/></p>
 	    			<p id="retour_feedback"></p>
-	    			<p id="loggeur"></p>
 	    		</div>
+	    		<p id="loggeur">abc</p>
 			</html>
 	    <?php
 		}

@@ -23,7 +23,7 @@ function launch_amas_requete(path) {
 		poid += document.getElementById(i+"ID").value+";";
 	}
 	/* récupérer le nombre de thèmes */
-	var nb_theme = document.getElementById("tab_theme").rows.length - 1;
+	var nb_theme = document.getElementById("tab_theme").rows.length;
 	/* et créer le paramètre de la requete php */
 	var theme = "";
 	for (var i = 0; i < nb_theme;i++) {
@@ -171,6 +171,9 @@ function launch_amas_feedback_choice(path) {
 			} else {
 				newPage.alert("L'intelligence artificielle modifie les notes");
 			}*/
+			if (this.responseText == "") {
+				newPage.alert("Vous avez utilisé le feedback trop de fois\nPas de modification des notes");
+			}
 		}
 	};
 	/* créer la requete php : path + nomPlugin + nomFichier + parametre */

@@ -14,6 +14,10 @@
 		fputs($f, $theme);
 		fputs($f, "\n");
 	}
+	foreach ($listeTheme as $theme) {
+		fputs($f, $theme);
+		fputs($f, "\n");
+	}
 	fclose($f);*/
 
 	$noteMax = 0;

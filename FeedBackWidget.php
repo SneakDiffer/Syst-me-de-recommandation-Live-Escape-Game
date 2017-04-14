@@ -13,6 +13,9 @@
 			?>
 			<html>
 			<script type="text/javascript" src="/scripts.js"></script>
+				<div class="tooltip">Aide
+  					<span class="tooltiptext">- Selectionnez une salle <br>- Renseigner les notes<br>- Renseignez votre expertise<br>- Valider le formulaire de saisie de note</span>
+				</div>
 				<div id="choix_salle">
 					<p>Selectionnez une salle</p>
 				    <SELECT id="selectBox" onchange="choix_Salle()"">
