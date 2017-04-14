@@ -6,14 +6,22 @@
 	border-bottom: 1px solid #ddd;
 }
 
+#tab_expertise table, #tab_expertise th, #tab_expertise td {
+	border-bottom: 1px solid #ddd;
+}
+
+#tab_expertise_2 table, #tab_expertise_2 th, #tab_expertise_2 td {
+	border-bottom: 1px solid #ddd;
+}
+
 #tab_res table, #tab_res th, #tab_res td {
-	width: 150px;
+	width: 100%;
 	height: 10px;
 	border-bottom: 1px solid #ddd;
 }
 
 .multiselect {
-	width: 200px;
+	width: 100%;
 }
 
 .selectBox {

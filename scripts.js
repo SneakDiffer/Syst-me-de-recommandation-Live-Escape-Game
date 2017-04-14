@@ -161,16 +161,6 @@ function launch_amas_feedback_choice(path) {
 	xhttp.onreadystatechange = function() {
 		/* si la réponse est correcte */
 		if (this.readyState == 4 && this.status == 200) {
-			//document.getElementById("retour_feedback").innerHTML = this.responseText;
-			///* récupérer le bloc de résultats */
-			/*
-			pb. si on met ca ici. l'utilisateur peut encore cliquer sur les autre choix 
-			tant que l'alert n'est pas levé. */
-			/*if (choix == 1) {
-				newPage.alert("L'intelligence artificielle ne modifie pas les notes");
-			} else {
-				newPage.alert("L'intelligence artificielle modifie les notes");
-			}*/
 			if (this.responseText == "") {
 				newPage.alert("Vous avez utilisé le feedback trop de fois\nPas de modification des notes");
 			}
@@ -181,6 +171,46 @@ function launch_amas_feedback_choice(path) {
 	/* envoyer la requete php */
 	xhttp.open("GET", requete, true);
 	xhttp.send();
+}
+
+function launch_amas_feedback_saisieNotes(path) {
+	/* récuperer le nombre de critères */
+	$nb_criteres = document.getElementById("tab_saisieNote").rows.length - 1;
+	/* et commencer créer le paramètre de la requete php */
+	var poid = "";
+	for ($i = 0; $i < $nb_criteres; $i++) {
+		poid += document.getElementById($i+"IDsaisieNote").value+";";
+	}
+	var expertise = document.getElementById("id_expertise_2").value;
+	var selectBox = document.getElementById("selectBox");
+	var nomSalle = selectBox.options[selectBox.selectedIndex].value;
+	/* construction du paramètre */
+	var param = nomSalle + ";" + expertise + ";" + poid;
+	/* créer une requete */
+	var xhttp;
+	if (window.XMLHttpRequest) {
+		xhttp = new XMLHttpRequest();
+		} else {
+		// code for IE6, IE5
+		xhttp = new ActiveXObject("Microsoft.XMLHTTP");
+	}
+	/* fonction synchrone */
+	xhttp.onreadystatechange = function() {
+		/* si la réponse est correcte */
+		if (this.readyState == 4 && this.status == 200) {
+			if (this.responseText == "") {
+				alert("Vous avez utilisé le feedback trop de fois\nPas de modification des notes");
+			} else {
+				alert("BDD modifiée");
+			}
+		}
+	};
+	/* créer la requete php : path + nomPlugin + nomFichier + parametre */
+	var requete = path + "/Systeme-de-recommandation-de-Live-Escape-Game/launcher_AMAS_feedback_saisieNotes.php?q=" + param;
+	/* envoyer la requete php */
+	xhttp.open("GET", requete, true);
+	xhttp.send();
+	unset_choix_Salle();
 }
 
 var expanded = false;
@@ -205,10 +235,16 @@ function close_menu_deroulant() {
 function choix_Salle() {
 	document.getElementById("id_saisieNote").style.visibility = 'visible';
 	document.getElementById("id_saisieNote").style.display = 'block';
-	document.getElementById("choix_salle").style.visibility = 'hidden';
-	document.getElementById("choix_salle").style.display = 'none';
 	var selectBox = document.getElementById("selectBox");
 	var selectedValue = selectBox.options[selectBox.selectedIndex].value;
 	document.getElementById("selected_salle").innerHTML = "Veuillez noter " + selectedValue;
+}
+
+function unset_choix_Salle() {
+	document.getElementById("id_saisieNote").style.visibility = 'hidden';
+	document.getElementById("id_saisieNote").style.display = 'none';
+	var selectBox = document.getElementById("selectBox");
+	selectBox.selectedIndex = 0;
+	document.getElementById("selected_salle").innerHTML = "" ;
 }
 

@@ -7,8 +7,6 @@
 			/* récupérer la liste des salles en fonction des thèmes */
 			require_once('../../../wp-config.php');
 			global $wpdb;
-			//$filename = "C:\instant wordpress\InstantWP_4.5\iwpserver\htdocs\wordpress\wp-content\plugins\Systeme-de-recommandation-de-Live-Escape-Game\\trace.txt";
-			//$f = fopen($filename, 'a+');
 			$list_salle = $wpdb->get_results( "SELECT ID, theme FROM {$wpdb->prefix}system_recommandation_salles");
 			/* pour toute les salles */
 			foreach ($list_salle as $salle) {
@@ -20,8 +18,6 @@
 						if (!in_array($salle->ID, $listIdSalle)) {
 							$listIdSalle[$cur] = $salle->ID;
 							$cur++;
-							//fputs($f, $salle->ID);
-							//fputs($f, "\n");
 						}
 					}
 				}
@@ -117,6 +113,62 @@
 			return $ret;
 		}
 
+		public function agent_interface_traiter_feedback_saisieNotes($nomSalle, $expertise, $listePoid) {
+			require_once('../../../wp-config.php');
+			global $wpdb;
+			$result = $wpdb->get_results("SELECT ID FROM wp_system_recommandation_salles WHERE Name = '" . $nomSalle . "'");
+			$idSalle = $result[0]->ID;
+			$nb_Max_Feedback_par_jour = 2;
+			$nb_feedback = $this->agent_interface_log_feedback_saisieNotes($idSalle);
+			if ($nb_feedback < $nb_Max_Feedback_par_jour) {
+				/* calcul d'une marge dynamique */
+				$marge = $this->agent_interface_get_dynamix_marge($expertise);
+				/* allocation de l'agent salle choisie */
+				$agent_salle = new agent_salle;
+				/* appel de l'agent salle pour modifier les notes */
+				$ret = $agent_salle->agent_salle_modify_note_salle($idSalle, $listePoid, $expertise, $marge);
+				/* détruire l'agent salle */
+				unset($agent_salle);
+				/* retourner les nouvelles notes (debug) */
+				return "RAS";
+			} else {
+				return "";
+			}
+		}
+
+		public function agent_interface_log_feedback_saisieNotes($idSalle) {
+			require_once('../../../wp-config.php');
+			global $wpdb;
+			/* récupérer l'ip */
+			$ip = $this->GetIP();
+			/* et la date */
+			$d = getdate();
+			$date = $d['mday'] . "." . $d['mon'] . "." . $d['year'] . "-" . $d['hours'] . ":" . $d['minutes'] . ":" . $d['seconds'];
+			/* inserer dans la BDD une nouvelle ligne pour log le feedback */
+			$wpdb->insert('wp_system_recommandation_log_feedback_saisienotes', array('ID'=>NULL, 'id_salle'=>$idSalle, 'Date'=>$date, 'IP'=>$ip), array('%d','%d','%s','%s'));
+			/* savoir combien de fois cet utilisateur à utilisé le feedback */
+			$result = $wpdb->get_results("SELECT * FROM wp_system_recommandation_log_feedback_saisienotes");
+			$nb_feedback = 0;
+			/* pour chaque resultat */ 
+			foreach ($result as $feedback) {
+				/* si c'est l'ip de l'utilisateur */
+				if ($feedback->IP == $ip) {
+					/* si c'est la salle concernée */
+					if ($feedback->id_salle == $idSalle) {
+						/* récupérer la date */
+						$tmp = explode("-", $feedback->Date);
+						/* récupérer les jours mois année */
+						$tmp2 = explode(".", $tmp[0]);
+						/* compter le nombre de feedback du jour */
+						if ($tmp2[0] == $d['mday'] && $tmp2[1] == $d['mon'] && $tmp2[2] == $d['year']) {
+							$nb_feedback++;
+						}
+					}
+				}
+			}
+			return $nb_feedback; 
+		}
+
 		public function agent_interface_traiter_feedback_choix($idSalle_choisie, $expertise, $listePoid, $idSalleProposees) {
 			$nb_Max_Feedback_par_jour = 2;
 			$nb_feedback = $this->agent_interface_log_feedback_choix($idSalle_choisie);
@@ -139,7 +191,6 @@
 		}
 
 		public function agent_interface_log_feedback_choix($idSalle_choisie) {
-			require_once('../../../wp-config.php');
 			global $wpdb;
 			/* récupérer l'ip */
 			$ip = $this->GetIP();
@@ -147,7 +198,7 @@
 			$d = getdate();
 			$date = $d['mday'] . "." . $d['mon'] . "." . $d['year'] . "-" . $d['hours'] . ":" . $d['minutes'] . ":" . $d['seconds'];
 			/* inserer dans la BDD une nouvelle ligne pour log le feedback */
-			$wpdb->insert('wp_system_recommandation_log_feedback_choix', array('ID'=>NULL, 'id_salle'=>$idSalle_choisie, 'Date'=>$date, 'IP'=>$ip), array('%d','%s','%s','%s'));
+			$wpdb->insert('wp_system_recommandation_log_feedback_choix', array('ID'=>NULL, 'id_salle'=>$idSalle_choisie, 'Date'=>$date, 'IP'=>$ip), array('%d','%d','%s','%s'));
 			/* savoir combien de fois cet utilisateur à utilisé le feedback */
 			$result = $wpdb->get_results("SELECT * FROM wp_system_recommandation_log_feedback_choix");
 			$nb_feedback = 0;

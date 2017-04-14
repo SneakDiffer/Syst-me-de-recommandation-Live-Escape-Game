@@ -118,7 +118,7 @@
 	    			<p style="text-align:center;"><input type="submit" value="Choisir cette salle" onclick="launch_amas_feedback_choice('<?php echo plugins_url();?>')"/></p>
 	    			<p id="retour_feedback"></p>
 	    		</div>
-	    		<p id="loggeur">abc</p>
+	    		<p id="loggeur"></p>
 			</html>
 	    <?php
 		}

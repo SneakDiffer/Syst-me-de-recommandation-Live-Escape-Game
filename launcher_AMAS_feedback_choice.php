@@ -20,13 +20,6 @@
 		$listePoid[$current] = $param[$j];
 		$current++;
 	}
-	
-	/*$date = get_the_date();
-	$filename = "C:\instant wordpress\InstantWP_4.5\iwpserver\htdocs\wordpress\wp-content\plugins\Systeme-de-recommandation-de-Live-Escape-Game\\trace.txt";
-	$f = fopen($filename, 'a+');
-	fputs($f, $date);
-	fputs($f, "\n");
-	fclose($f);*/
 
 	/* si choix 1 : OK, pas de modification à faire */
 	if ($numChoix == "1") {

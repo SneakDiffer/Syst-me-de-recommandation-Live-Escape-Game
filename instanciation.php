@@ -66,6 +66,17 @@
 					REFERENCES wp_system_recommandation_salles(ID),
 					PRIMARY KEY(ID)
 					);");
+
+					$wpdb->query("CREATE TABLE  IF NOT EXISTS {$wpdb->prefix}system_recommandation_log_feedback_saisienotes
+					(
+					ID int NOT NULL AUTO_INCREMENT,
+					id_salle INT,
+					Date varchar(64) NOT NULL,
+					IP varchar(64) NOT NULL,
+					FOREIGN KEY (id_salle)
+					REFERENCES wp_system_recommandation_salles(ID),
+					PRIMARY KEY(ID)
+					);");
 		}
 
 		//Delet the table
@@ -75,6 +86,7 @@
 
 		    $wpdb->query("DROP TABLE IF EXISTS {$wpdb->prefix}system_recommandation_notes;");
 		    $wpdb->query("DROP TABLE IF EXISTS {$wpdb->prefix}system_recommandation_log_feedback_choix;");
+		    $wpdb->query("DROP TABLE IF EXISTS {$wpdb->prefix}system_recommandation_log_feedback_saisienotes;");
 		    $wpdb->query("DROP TABLE IF EXISTS {$wpdb->prefix}system_recommandation_salles;");
 		    $wpdb->query("DROP TABLE IF EXISTS {$wpdb->prefix}system_recommandation_criteres;");
 		    $wpdb->query("DROP TABLE IF EXISTS {$wpdb->prefix}system_recommandation_themes;");

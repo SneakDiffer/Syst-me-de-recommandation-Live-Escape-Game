@@ -32,7 +32,7 @@
 						?>
 					</SELECT> 
 				</div>
-				<div id="id_saisieNote" style="visibility: hidden; display: none">
+				<div id="id_saisieNote" style="visibility:hidden; display:none">
 				<p id="selected_salle"></p>
 				<table id="tab_saisieNote" style="width:100%">
 					<tr>
@@ -50,7 +50,7 @@
 							?>
 							<tr>
 								<td><label><?php echo $row->Name ?></label></td>
-		                		<td colspan="2"><input type="range" style="width:200px" id="<?php echo $i ?>ID" value="50" min="1" max="100" step ="0.1" oninput="<?php echo $i ?>Output.value = <?php echo $i ?>Input.value"></input> </td>
+		                		<td colspan="2"><input type="range" id="<?php echo $i ?>IDsaisieNote" value="50" min="1" max="100" step ="0.1" oninput="<?php echo $i ?>Output.value = <?php echo $i ?>Input.value"></input> </td>
 		                   </tr>
 		                   <?php
 		                   $i += 1;
@@ -61,10 +61,10 @@
     				<tr><td>expertise</td><td style="text-align:left">faible</td><td style="text-align:right">elevée</td></tr>
 					<tr>
 						<td>expertise</td>
-						<td><input type="range" style="width:200px" id="id_expertise" value="50" min="1" max="100" step ="0.1" oninput="<?php echo $i ?>Output.value = <?php echo $i ?>Input.value"></input></td>
+						<td colspan="2"><input type="range" id="id_expertise_2" value="50" min="1" max="100" step ="0.1" oninput="<?php echo $i ?>Output.value = <?php echo $i ?>Input.value"></input></td>
 					</tr>   				
     			</table>
-    			<input type="submit" style="text-align:center" value="Envoyer le formulaire" onclick=""/>
+    			<input type="submit" style="text-align:center" value="Envoyer le formulaire" onclick="launch_amas_feedback_saisieNotes('<?php echo plugins_url();?>')"/>
     			</div>
 			</html>
 	    <?php

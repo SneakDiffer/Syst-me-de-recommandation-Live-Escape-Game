@@ -7,18 +7,6 @@
 
 	$listePoid = explode(";", $tmp[0]);
 	$listeTheme = explode(";", $tmp[1]);
-	
-	/*$filename = "C:\instant wordpress\InstantWP_4.5\iwpserver\htdocs\wordpress\wp-content\plugins\Systeme-de-recommandation-de-Live-Escape-Game\\trace_2.txt";
-	$f = fopen($filename, 'a+');
-	foreach ($listePoid as $theme) {
-		fputs($f, $theme);
-		fputs($f, "\n");
-	}
-	foreach ($listeTheme as $theme) {
-		fputs($f, $theme);
-		fputs($f, "\n");
-	}
-	fclose($f);*/
 
 	$noteMax = 0;
 	foreach ($listePoid as $poid) {
