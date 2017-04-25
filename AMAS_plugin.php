@@ -116,7 +116,7 @@
 		public function agent_interface_traiter_feedback_saisieNotes($nomSalle, $expertise, $listePoid) {
 			require_once('../../../wp-config.php');
 			global $wpdb;
-			$result = $wpdb->get_results("SELECT ID FROM wp_system_recommandation_salles WHERE Name = '" . $nomSalle . "'");
+			$result = $wpdb->get_results("SELECT ID FROM {$wpdb->prefix}system_recommandation_salles WHERE Name = '" . $nomSalle . "'");
 			$idSalle = $result[0]->ID;
 			$nb_Max_Feedback_par_jour = 2;
 			$infos_feedback = $this->agent_interface_log_feedback_saisieNotes($idSalle);
@@ -131,7 +131,7 @@
 				/* détruire l'agent salle */
 				unset($agent_salle);
 				/* inserer dans la BDD une nouvelle ligne pour log le feedback */
-				$wpdb->insert('wp_system_recommandation_log_feedback_saisienotes', array('ID'=>NULL, 'id_salle'=>$idSalle, 'Date'=>$infos_feedback[1], 'IP'=>$infos_feedback[0], 'Modifications'=>$modifs), array('%d','%d','%s','%s','%s'));
+				$wpdb->insert("{$wpdb->prefix}system_recommandation_log_feedback_saisienotes", array('ID'=>NULL, 'id_salle'=>$idSalle, 'Date'=>$infos_feedback[1], 'IP'=>$infos_feedback[0], 'Modifications'=>$modifs), array('%d','%d','%s','%s','%s'));
 				return "RAS";
 			} else {
 				return "";
@@ -146,7 +146,7 @@
 			$d = getdate();
 			$date = $d['mday'] . "." . $d['mon'] . "." . $d['year'] . "-" . $d['hours'] . ":" . $d['minutes'] . ":" . $d['seconds'];
 			/* savoir combien de fois cet utilisateur à utilisé le feedback */
-			$result = $wpdb->get_results("SELECT * FROM wp_system_recommandation_log_feedback_saisienotes");
+			$result = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}system_recommandation_log_feedback_saisienotes");
 			$nb_feedback = 0;
 			/* pour chaque resultat */ 
 			foreach ($result as $feedback) {
@@ -189,7 +189,7 @@
 				/* détruire l'agent salle */
 				unset($agent_salle);
 				/* inserer dans la BDD une nouvelle ligne pour log le feedback */
-				$wpdb->insert('wp_system_recommandation_log_feedback_choix', array('ID'=>NULL, 'id_salle'=>$idSalle_choisie, 'Date'=>$infos_feedback[1], 'IP'=>$infos_feedback[0], 'Modifications'=>$modifs), array('%d','%d','%s','%s','%s'));
+				$wpdb->insert("{$wpdb->prefix}system_recommandation_log_feedback_choix", array('ID'=>NULL, 'id_salle'=>$idSalle_choisie, 'Date'=>$infos_feedback[1], 'IP'=>$infos_feedback[0], 'Modifications'=>$modifs), array('%d','%d','%s','%s','%s'));
 				return "RAS";
 			} else {
 				return "";
@@ -204,7 +204,7 @@
 			$d = getdate();
 			$date = $d['mday'] . "." . $d['mon'] . "." . $d['year'] . "-" . $d['hours'] . ":" . $d['minutes'] . ":" . $d['seconds'];
 			/* savoir combien de fois cet utilisateur à utilisé le feedback */
-			$result = $wpdb->get_results("SELECT * FROM wp_system_recommandation_log_feedback_choix");
+			$result = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}system_recommandation_log_feedback_choix");
 			$nb_feedback = 0;
 			/* pour chaque resultat */ 
 			foreach ($result as $feedback) {
