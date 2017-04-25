@@ -18,7 +18,7 @@
 				</div>
 				<div id="choix_salle">
 					<p>Selectionnez une salle</p>
-				    <SELECT id="selectBox" onchange="choix_Salle()"">
+				    <SELECT id="selectBox" onchange="choix_Salle()">
 				    	<OPTION></OPTION>
 				    <?php
 						global $wpdb;

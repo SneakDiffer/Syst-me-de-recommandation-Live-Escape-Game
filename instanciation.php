@@ -62,6 +62,7 @@
 					id_salle INT,
 					Date varchar(64) NOT NULL,
 					IP varchar(64) NOT NULL,
+					Modifications varchar(512),
 					FOREIGN KEY (id_salle)
 					REFERENCES wp_system_recommandation_salles(ID),
 					PRIMARY KEY(ID)
@@ -73,6 +74,7 @@
 					id_salle INT,
 					Date varchar(64) NOT NULL,
 					IP varchar(64) NOT NULL,
+					Modifications varchar(512),
 					FOREIGN KEY (id_salle)
 					REFERENCES wp_system_recommandation_salles(ID),
 					PRIMARY KEY(ID)

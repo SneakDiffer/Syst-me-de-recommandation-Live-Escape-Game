@@ -119,17 +119,19 @@
 			$result = $wpdb->get_results("SELECT ID FROM wp_system_recommandation_salles WHERE Name = '" . $nomSalle . "'");
 			$idSalle = $result[0]->ID;
 			$nb_Max_Feedback_par_jour = 2;
-			$nb_feedback = $this->agent_interface_log_feedback_saisieNotes($idSalle);
+			$infos_feedback = $this->agent_interface_log_feedback_saisieNotes($idSalle);
+			$nb_feedback = $infos_feedback[2];
 			if ($nb_feedback < $nb_Max_Feedback_par_jour) {
 				/* calcul d'une marge dynamique */
 				$marge = $this->agent_interface_get_dynamix_marge($expertise);
 				/* allocation de l'agent salle choisie */
 				$agent_salle = new agent_salle;
 				/* appel de l'agent salle pour modifier les notes */
-				$ret = $agent_salle->agent_salle_modify_note_salle($idSalle, $listePoid, $expertise, $marge);
+				$modifs = $agent_salle->agent_salle_modify_note_salle($idSalle, $listePoid, $expertise, $marge);
 				/* détruire l'agent salle */
 				unset($agent_salle);
-				/* retourner les nouvelles notes (debug) */
+				/* inserer dans la BDD une nouvelle ligne pour log le feedback */
+				$wpdb->insert('wp_system_recommandation_log_feedback_saisienotes', array('ID'=>NULL, 'id_salle'=>$idSalle, 'Date'=>$infos_feedback[1], 'IP'=>$infos_feedback[0], 'Modifications'=>$modifs), array('%d','%d','%s','%s','%s'));
 				return "RAS";
 			} else {
 				return "";
@@ -137,15 +139,12 @@
 		}
 
 		public function agent_interface_log_feedback_saisieNotes($idSalle) {
-			require_once('../../../wp-config.php');
 			global $wpdb;
 			/* récupérer l'ip */
 			$ip = $this->GetIP();
 			/* et la date */
 			$d = getdate();
 			$date = $d['mday'] . "." . $d['mon'] . "." . $d['year'] . "-" . $d['hours'] . ":" . $d['minutes'] . ":" . $d['seconds'];
-			/* inserer dans la BDD une nouvelle ligne pour log le feedback */
-			$wpdb->insert('wp_system_recommandation_log_feedback_saisienotes', array('ID'=>NULL, 'id_salle'=>$idSalle, 'Date'=>$date, 'IP'=>$ip), array('%d','%d','%s','%s'));
 			/* savoir combien de fois cet utilisateur à utilisé le feedback */
 			$result = $wpdb->get_results("SELECT * FROM wp_system_recommandation_log_feedback_saisienotes");
 			$nb_feedback = 0;
@@ -166,24 +165,31 @@
 					}
 				}
 			}
-			return $nb_feedback; 
+			/* construire l'array de retour */
+			$ret = array();
+			$ret[0] = $ip;
+			$ret[1] = $date;
+			$ret[2] = $nb_feedback;
+			return $ret;  
 		}
 
 		public function agent_interface_traiter_feedback_choix($idSalle_choisie, $expertise, $listePoid, $idSalleProposees) {
+			require_once('../../../wp-config.php');
+			global $wpdb;
 			$nb_Max_Feedback_par_jour = 2;
-			$nb_feedback = $this->agent_interface_log_feedback_choix($idSalle_choisie);
+			$infos_feedback = $this->agent_interface_log_feedback_choix($idSalle_choisie);
+			$nb_feedback = $infos_feedback[2];
 			if ($nb_feedback < $nb_Max_Feedback_par_jour) {
 				/* calcul d'une marge dynamique */
 				$marge = $this->agent_interface_get_dynamix_marge($expertise);
-				/* allocation des agents salles choisie */
-				//$list_agent_salle = $this->allocation_salle_ciblee($idSalleProposees);
 				/* allocation de l'agent salle choisie */
 				$agent_salle = new agent_salle;
 				/* appel de l'agent salle pour modifier les notes */
-				$ret = $agent_salle->agent_salle_modify_note_salle($idSalle_choisie, $listePoid, $expertise, $marge);
+				$modifs = $agent_salle->agent_salle_modify_note_salle($idSalle_choisie, $listePoid, $expertise, $marge);
 				/* détruire l'agent salle */
 				unset($agent_salle);
-				/* retourner les nouvelles notes (debug) */
+				/* inserer dans la BDD une nouvelle ligne pour log le feedback */
+				$wpdb->insert('wp_system_recommandation_log_feedback_choix', array('ID'=>NULL, 'id_salle'=>$idSalle_choisie, 'Date'=>$infos_feedback[1], 'IP'=>$infos_feedback[0], 'Modifications'=>$modifs), array('%d','%d','%s','%s','%s'));
 				return "RAS";
 			} else {
 				return "";
@@ -197,8 +203,6 @@
 			/* et la date */
 			$d = getdate();
 			$date = $d['mday'] . "." . $d['mon'] . "." . $d['year'] . "-" . $d['hours'] . ":" . $d['minutes'] . ":" . $d['seconds'];
-			/* inserer dans la BDD une nouvelle ligne pour log le feedback */
-			$wpdb->insert('wp_system_recommandation_log_feedback_choix', array('ID'=>NULL, 'id_salle'=>$idSalle_choisie, 'Date'=>$date, 'IP'=>$ip), array('%d','%d','%s','%s'));
 			/* savoir combien de fois cet utilisateur à utilisé le feedback */
 			$result = $wpdb->get_results("SELECT * FROM wp_system_recommandation_log_feedback_choix");
 			$nb_feedback = 0;
@@ -219,17 +223,12 @@
 					}
 				}
 			}
-			return $nb_feedback; 
-		}
-
-		public function allocation_salle_ciblee($list_idSalle) {
-			$list_agent_salle = array();
-			$i = 0;
-			foreach ($list_idSalle as $idSalle) {
-				$list_agent_salle[$i] = new agent_salle;
-				$i++;
-			}
-			return $list_agent_salle;
+			/* construire l'array de retour */
+			$ret = array();
+			$ret[0] = $ip;
+			$ret[1] = $date;
+			$ret[2] = $nb_feedback;
+			return $ret; 
 		}
 
 		public function agent_interface_get_dynamix_marge($expertise) {
@@ -302,12 +301,17 @@
 			/* pour tout les critères */
 			foreach ($list_agent_critere as $agent_critere) {
 				/* appel de l'agent critères pour modifier sa notes au besoin */
-				$newNote = $agent_critere->agent_critere_modify_note($idSalle, $idCritere[$i]->ID, $listePoid[$i], $marge, $expertise);
+				$modifs = $agent_critere->agent_critere_modify_note($idSalle, $idCritere[$i]->ID, $listePoid[$i], $marge, $expertise);
 				/* stockage de la nouvelle note */
-				$ret = $ret . ":SEP:" . $newNote;
+				if ($ret == "") {
+					$ret = $modifs;
+				}
+				else {
+					$ret = $ret . ";;" . $modifs;
+				}
 				$i++;
 			}
-			/* retourner les nouvelles notes (debug) */
+			/* retourner les modifications */
 			return $ret;
 		}
 	}
@@ -321,6 +325,7 @@
 		}
 
 		public function agent_critere_modify_note($idSalle, $idCritere, $poid, $marge, $expertise) {
+			$ret = $idCritere . ";";
 			/* incrément dynamique selon l'expertise */
 			$increment = 1 * ($expertise / 100);
 			/* récupérer la note actuelle du critère */
@@ -332,14 +337,20 @@
 				/* augmenter la note de incrément */
 				$newNote = $result[0]->note + $increment;
 				$wpdb->query("UPDATE {$wpdb->prefix}system_recommandation_notes SET note = " . $newNote . " WHERE id_salle = " . $idSalle . " AND id_critere = " . $idCritere);
+				$ret = $ret . $increment;
 			} 
 			/* sinon si note > note souhaitée + marge */
 			elseif ($result[0]->note > $poid + $marge) {
 				/* baisser la note de incrément */
 				$newNote = $result[0]->note - $increment;
 				$wpdb->query("UPDATE {$wpdb->prefix}system_recommandation_notes SET note = " . $newNote . " WHERE id_salle = " . $idSalle . " AND id_critere = " . $idCritere);
+				$ret = $ret . "-" . $increment;
 			}
-			/* retourner la nouvelle note (debug) */
-			return $newNote;
+			/* sinon pas de modification */
+			else {
+				$ret = $ret . "0";
+			}
+			/* retourner les modifications */
+			return $ret;
 		}
 	}
