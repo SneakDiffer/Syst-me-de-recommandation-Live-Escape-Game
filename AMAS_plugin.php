@@ -118,8 +118,21 @@
 			global $wpdb;
 			$result = $wpdb->get_results("SELECT ID FROM {$wpdb->prefix}system_recommandation_salles WHERE Name = '" . $nomSalle . "'");
 			$idSalle = $result[0]->ID;
-			$nb_Max_Feedback_par_jour = 2;
+			$result = $wpdb->get_results("SELECT nb_max_feedback_saisienote_jour FROM {$wpdb->prefix}system_recommandation_configuration");
+			$nb_Max_Feedback_par_jour = $result[0]->nb_max_feedback_saisienote_jour;
+			$type_feedback = 1;
 			$infos_feedback = $this->agent_interface_log_feedback_saisieNotes($idSalle);
+
+			/*$filename = "C:\instant wordpress\InstantWP_4.5\iwpserver\htdocs\wordpress\wp-content\plugins\Systeme-de-recommandation-de-Live-Escape-Game\\trace_2.txt";
+			$f = fopen($filename, 'a+');
+			fputs($f, "ip = ");
+			fputs($f, $infos_feedback[0]);
+			fputs($f, "\n");
+			fputs($f, "date = ");
+			fputs($f, $infos_feedback[1]);
+			fputs($f, "\n");
+			fclose($f);*/
+
 			$nb_feedback = $infos_feedback[2];
 			if ($nb_feedback < $nb_Max_Feedback_par_jour) {
 				/* calcul d'une marge dynamique */
@@ -127,7 +140,7 @@
 				/* allocation de l'agent salle choisie */
 				$agent_salle = new agent_salle;
 				/* appel de l'agent salle pour modifier les notes */
-				$modifs = $agent_salle->agent_salle_modify_note_salle($idSalle, $listePoid, $expertise, $marge);
+				$modifs = $agent_salle->agent_salle_modify_note_salle($idSalle, $listePoid, $expertise, $marge, $type_feedback);
 				/* détruire l'agent salle */
 				unset($agent_salle);
 				/* inserer dans la BDD une nouvelle ligne pour log le feedback */
@@ -176,7 +189,9 @@
 		public function agent_interface_traiter_feedback_choix($idSalle_choisie, $expertise, $listePoid, $idSalleProposees) {
 			require_once('../../../wp-config.php');
 			global $wpdb;
-			$nb_Max_Feedback_par_jour = 2;
+			$result = $wpdb->get_results("SELECT nb_max_feedback_saisienote_jour FROM {$wpdb->prefix}system_recommandation_configuration");
+			$nb_Max_Feedback_par_jour = $result[0]->nb_max_feedback_saisienote_jour;
+			$type_feedback = 0;
 			$infos_feedback = $this->agent_interface_log_feedback_choix($idSalle_choisie);
 			$nb_feedback = $infos_feedback[2];
 			if ($nb_feedback < $nb_Max_Feedback_par_jour) {
@@ -185,7 +200,7 @@
 				/* allocation de l'agent salle choisie */
 				$agent_salle = new agent_salle;
 				/* appel de l'agent salle pour modifier les notes */
-				$modifs = $agent_salle->agent_salle_modify_note_salle($idSalle_choisie, $listePoid, $expertise, $marge);
+				$modifs = $agent_salle->agent_salle_modify_note_salle($idSalle_choisie, $listePoid, $expertise, $marge, $type_feedback);
 				/* détruire l'agent salle */
 				unset($agent_salle);
 				/* inserer dans la BDD une nouvelle ligne pour log le feedback */
@@ -236,7 +251,7 @@
 			return 20 - ($expertise / 10);
 		}
 
-		public function GetIP() {
+		/*public function GetIP() {
 		    foreach (array('HTTP_CLIENT_IP', 'HTTP_X_FORWARDED_FOR', 'HTTP_X_FORWARDED', 'HTTP_X_CLUSTER_CLIENT_IP', 'HTTP_FORWARDED_FOR', 'HTTP_FORWARDED', 'REMOTE_ADDR') as $key) {
 		        if (array_key_exists($key, $_SERVER) === true) {
 		            foreach (array_map('trim', explode(',', $_SERVER[$key])) as $ip) {
@@ -246,6 +261,205 @@
 		            }
 		        }
 		    }
+		}*/
+
+		/*public function GetIP() {
+			return getHostByName(getHostName());
+		}*/
+
+		/*public function GetIP() {
+			return getHostByName($_SERVER['host_name']);
+		}*/
+
+		/*public function GetIP(){
+	        $client  = @$_SERVER['HTTP_CLIENT_IP'];
+	        $forward = @$_SERVER['HTTP_X_FORWARDED_FOR'];
+	        $remote  = $_SERVER['REMOTE_ADDR'];
+
+	        if(filter_var($client, FILTER_VALIDATE_IP)){
+	            $ip = $client;
+	        }elseif(filter_var($forward, FILTER_VALIDATE_IP)){
+	            $ip = $forward;
+	        }else{
+	            $ip = $remote;
+	        }
+	        return $ip;
+    	}*/
+
+    	/*public function GetIP() {
+		    if(isset($_SERVER["SERVER_ADDR"]))
+		    return $_SERVER["SERVER_ADDR"];
+		    else {
+		    // Running CLI
+		    if(stristr(PHP_OS, 'WIN')) {
+		        //  Rather hacky way to handle windows servers
+		        exec('ipconfig /all', $catch);
+		        foreach($catch as $line) {
+		        if(eregi('IP Address', $line)) {
+		            // Have seen exec return "multi-line" content, so another hack.
+		            if(count($lineCount = split(':', $line)) == 1) {
+		            list($t, $ip) = split(':', $line);
+		            $ip = trim($ip);
+		            } else {
+		            $parts = explode('IP Address', $line);
+		            $parts = explode('Subnet Mask', $parts[1]);
+		            $parts = explode(': ', $parts[0]);
+		            $ip = trim($parts[1]);
+		            }
+		            if(ip2long($ip > 0)) {
+		            echo 'IP is '.$ip."\n";
+		            return $ip;
+		            } else
+		            return "ip not found"; // TODO: Handle this failure condition.
+		        }
+		        }
+		    } else {
+		        $ifconfig = shell_exec('/sbin/ifconfig eth0');
+		        preg_match('/addr:([\d\.]+)/', $ifconfig, $match);
+		        return $match[1];
+		    }
+		    }
+		}*/
+
+		/*public function getIP() {
+			if ( ! empty( $_SERVER['HTTP_CLIENT_IP'] ) ) {
+				//check ip from share internet
+				$ip = $_SERVER['HTTP_CLIENT_IP'];
+			} elseif ( ! empty( $_SERVER['HTTP_X_FORWARDED_FOR'] ) ) {
+				//to check ip is pass from proxy
+				$ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
+			} else {
+				$ip = $_SERVER['REMOTE_ADDR'];
+			}
+			return apply_filters( 'wpb_get_ip', $ip );
+		}*/
+
+		/*public function getIP() {}
+			$ip=getHostByName($_SERVER['host_name']);
+			$mac_string = shell_exec("arp -a $ip");
+			$mac_array = explode(" ",$mac_string);
+			$mac = $mac_array[3];
+			return $mac;
+		}*/
+		/*public function unix_os(){
+		    ob_start();
+		    system('ifconfig -a');
+		    $mycom = ob_get_contents(); // Capture the output into a variable
+		    ob_clean(); // Clean (erase) the output buffer
+		    $findme = "Physical";
+		    //Find the position of Physical text 
+		    $pmac = strpos($mycom, $findme); 
+		    $mac = substr($mycom, ($pmac + 37), 18);
+
+		    return $mac;
+	    }
+
+	    public function win_os(){ 
+		    ob_start();
+		    system('ipconfig-a');
+		    $mycom=ob_get_contents(); // Capture the output into a variable
+		    ob_clean(); // Clean (erase) the output buffer
+		    $findme = "Physical";
+		    $pmac = strpos($mycom, $findme); // Find the position of Physical text
+		    $mac=substr($mycom,($pmac+36),17); // Get Physical Address
+
+		    return $mac;
+	   	}
+
+	   	public function getIP() {
+	   		$mac_unix = $this->unix_os();
+	   		$mac_win = $this->win_os();
+
+	   		$filename = "C:\instant wordpress\InstantWP_4.5\iwpserver\htdocs\wordpress\wp-content\plugins\Systeme-de-recommandation-de-Live-Escape-Game\\trace.txt";
+			$f = fopen($filename, 'a+');
+			fputs($f, "mac_win = ");
+			fputs($f, $mac_win);
+			fputs($f, "\n");
+			fputs($f, "mac_unix = ");
+			fputs($f, $mac_unix);
+			fputs($f, "\n");
+			fclose($f);
+
+			return $mac_win;
+	   	}*/
+
+	    /*public function getIP() {
+	    	ob_start();
+			//Get the ipconfig details using system commond
+			system('ipconfig /all');
+
+			// Capture the output into a variable
+			$mycom=ob_get_contents();
+
+			// Clean (erase) the output buffer
+			ob_clean();
+
+			$findme = "Physical";
+			//Search the "Physical" | Find the position of Physical text
+			$pmac = strpos($mycom, $findme);
+
+			// Get Physical Address
+			$mac=substr($mycom,($pmac+36),17);
+			return $mac;
+	    }*/
+
+	    /*public function getIP() {
+	    	return $this->GetClientIP(true);
+	    }
+
+
+	    public function GetClientIP($validate = False){
+		  $ipkeys = array(
+		  'REMOTE_ADDR', 
+		  'HTTP_CLIENT_IP', 
+		  'HTTP_X_FORWARDED_FOR', 
+		  'HTTP_X_FORWARDED', 
+		  'HTTP_FORWARDED_FOR', 
+		  'HTTP_FORWARDED', 
+		  'HTTP_X_CLUSTER_CLIENT_IP'
+		  );
+
+		  //now we check each key against $_SERVER if contain such value
+
+		  $ip = array();
+		  foreach($ipkeys as $keyword){
+		    if( isset($_SERVER[$keyword]) ){
+		      if($validate){
+		        if( $this->ValidatePublicIP($_SERVER[$keyword]) ){
+		          $ip[] = $_SERVER[$keyword];
+		        }
+		      }else{
+		        $ip[] = $_SERVER[$keyword];
+		      }
+		    }
+		  }
+
+		  $ip = ( empty($ip) ? 'Unknown' : implode(", ", $ip) );
+		  return $ip;
+
+		}
+		public function ValidatePublicIP($ip){
+		  if(filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE)) {
+		    return true;
+		  }
+		  else {
+		    return false;
+		  }
+		} */
+
+		function getIP() {
+			// IP si internet partagé
+			if (isset($_SERVER['HTTP_CLIENT_IP'])) {
+				return $_SERVER['HTTP_CLIENT_IP'];
+			}
+			// IP derrière un proxy
+			elseif (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+				return $_SERVER['HTTP_X_FORWARDED_FOR'];
+			}
+			// Sinon : IP normale
+			else {
+				return (isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '');
+			}
 		}
 	}
 
@@ -289,7 +503,7 @@
 			return $ret;
 		}
 
-		public function agent_salle_modify_note_salle($idSalle, $listePoid, $expertise, $marge) {
+		public function agent_salle_modify_note_salle($idSalle, $listePoid, $expertise, $marge, $type_feedback) {
 			/* créer les agents critère */
 			$list_agent_critere = $this->allocation_all_criteres(); 
 			/* récupérer la liste des critères */
@@ -301,7 +515,7 @@
 			/* pour tout les critères */
 			foreach ($list_agent_critere as $agent_critere) {
 				/* appel de l'agent critères pour modifier sa notes au besoin */
-				$modifs = $agent_critere->agent_critere_modify_note($idSalle, $idCritere[$i]->ID, $listePoid[$i], $marge, $expertise);
+				$modifs = $agent_critere->agent_critere_modify_note($idSalle, $idCritere[$i]->ID, $listePoid[$i], $marge, $expertise, $type_feedback);
 				/* stockage de la nouvelle note */
 				if ($ret == "") {
 					$ret = $modifs;
@@ -324,12 +538,21 @@
 			return $result[0]->note * $poid; 
 		}
 
-		public function agent_critere_modify_note($idSalle, $idCritere, $poid, $marge, $expertise) {
+		public function agent_critere_modify_note($idSalle, $idCritere, $poid, $marge, $expertise, $type_feedback) {
+			global $wpdb;
 			$ret = $idCritere . ";";
 			/* incrément dynamique selon l'expertise */
-			$increment = 1 * ($expertise / 100);
+			$base = 0;
+			/* selon le type de feedback */
+			if ($type_feedback == 0) {
+				$result = $wpdb->get_results("SELECT increment_feedback_choix FROM {$wpdb->prefix}system_recommandation_configuration");
+				$base = $result[0]->increment_feedback_choix;
+			} elseif ($type_feedback == 1) {
+				$result = $wpdb->get_results("SELECT increment_feedback_saisienote FROM {$wpdb->prefix}system_recommandation_configuration");
+				$base = $result[0]->increment_feedback_saisienote;
+			} 
+			$increment = $base * ($expertise / 100);
 			/* récupérer la note actuelle du critère */
-			global $wpdb;
 			$result = $wpdb->get_results("SELECT note FROM {$wpdb->prefix}system_recommandation_notes WHERE id_salle = " . $idSalle . " AND id_critere = " . $idCritere);
 			$newNote = $result[0]->note;
 			/* si note + marge < note souhaitée */
