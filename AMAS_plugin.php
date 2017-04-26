@@ -12,12 +12,14 @@
 			foreach ($list_salle as $salle) {
 				/* récupérer les thèmes de la salles courantes */
 				$list_themes = explode(";",$salle->theme);
-				/* pour tout les thèmes de la salle */
-				foreach ($list_themes as $theme) {
-					if (in_array($theme, $listeTheme)) {
-						if (!in_array($salle->ID, $listIdSalle)) {
-							$listIdSalle[$cur] = $salle->ID;
-							$cur++;
+				if ($list_themes[0] != "") {
+					/* pour tout les thèmes de la salle */
+					foreach ($list_themes as $theme) {
+						if (in_array($theme, $listeTheme)) {
+							if (!in_array($salle->ID, $listIdSalle)) {
+								$listIdSalle[$cur] = $salle->ID;
+								$cur++;
+							}
 						}
 					}
 				}
