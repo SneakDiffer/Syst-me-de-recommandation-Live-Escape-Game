@@ -32,7 +32,7 @@
 							?>
 							<tr>
 								<td><label><?php echo $row->Name ?></label></td>
-		                		<td colspan="2"><input type="range" id="<?php echo $i ?>ID" value="50" min="1" max="100" step ="0.1" oninput="<?php echo $i ?>Output.value = <?php echo $i ?>Input.value"></input> </td>
+		                		<td colspan="2"><input type="range" style="width:90%" id="<?php echo $i ?>ID" value="50" min="1" max="100" step ="0.1" oninput="<?php echo $i ?>Output.value = <?php echo $i ?>Input.value"></input> </td>
 		                   </tr>
 		                   <?php
 		                   $i += 1;
@@ -67,54 +67,58 @@
 				  </div>
 				</form>
     			<table id="tab_expertise" style="width:100%">
-    			<tr><td>expertise</td><td style="text-align:left">faible</td><td style="text-align:right">elevée</td></tr>
+    			<tr><td>expertise</td><td style="text-align:left">faible</td><td style="text-align:right">elevée</td><td style="text-align:right">Valeur</td></tr>
 					<tr>
 						<td>expertise</td>
-						<td colspan="2"><input type="range" id="id_expertise" value="50" min="1" max="100" step ="0.1" oninput="<?php echo $i ?>Output.value = <?php echo $i ?>Input.value"></input></td>
+						<td colspan="2">
+							<input type="range" style="width:90%" id="id_expertise" name="id_expertise" value="50" min="1" max="100" step ="0.1" oninput="show_range_value('id_expertise', 'expertise_value')">
+							<td id="expertise_value" style="text-align:right">50</td>
 					</tr>   				
     			</table>
     			<div style="text-align:center"> <input type="submit" value="Lancer la recherche" onclick="launch_amas_requete('<?php echo plugins_url();?>')"/> </div> 
     			<!-- tableau des résultats caché à l'instanciation-->
-    			<div style="visibility: hidden; display: none" id="div_results_2">
+    			<div style="visibility:hidden;display:none" id="div_results_2">
 	    			<p>Suggestions: </p> 
 	    		</div>
 	    		<div>
-	    			<table id="tab_res">
+	    			<table id="tab_res" style="width:100%">
 	    				<!-- Salle / Note / Choix / lien (toujours caché) -->
-	    				<tr id="res" style="visibility: hidden; display: none">
-	    					<td style="text-align:left;">Salle </td>
-	    					<td style="text-align:center"> Score </td>
-	    					<td style="text-align:right;">choisir</td>
+	    				<tr id="res" style="visibility:hidden;display:none">
+	    					<td style="text-align:left">Salle </td>
+	    					<td style="text-align:left"> Score </td>
+	    					<td style="text-align:right">Choisir</td>
+	    					<td style="visibility:hidden;display:none">Lien</td>
+	    					<td style="visibility:hidden;display:none">ID_salle</td>
 	    				</tr>
 	    				<tr id="res_1" style="visibility: hidden; display: none">
-	    					<td style="text-align:left;" id="nomSalle_1"></td>
-	    					<td style="text-align:center" id="note_1"></td>
+	    					<td style="text-align:left" id="nomSalle_1"></td>
+	    					<td style="text-align:left" id="note_1"></td>
 	    					<!-- bouton, onclick ouvre la page du lien associé à sa ligne -->
-	    					<td style="text-align:right;"><input type="radio" name="radio_buton_choice" value="choix 1" checked="checked"/></td>
+	    					<td style="text-align:right"><input type="radio" name="radio_buton_choice" value="choix 1" checked="checked"/></td>
 	    					<!-- lien, et idSalle toujours caché -->
-	    					<td style="visibility: hidden; display: none" id="lien_1"></td>
-	    					<td style="visibility: hidden; display: none" id="idSalle_1"></td>
+	    					<td style="visibility:hidden;display:none" id="lien_1"></td>
+	    					<td style="visibility:hidden;display:none" id="idSalle_1"></td>
 	    				</tr>
 	    				<tr id="res_2" style="visibility: hidden; display: none">
 	    					<td style="text-align:left;" id="nomSalle_2"></td>
-	    					<td style="text-align:center" id="note_2"></td>
+	    					<td style="text-align:left" id="note_2"></td>
 	    					<!-- bouton, onclick ouvre la page du lien associé à sa ligne -->
 	    					<td style="text-align:right;"><input type="radio" name="radio_buton_choice" value="choix 2"/></td>
 	    					<!-- lien, et idSalle toujours caché -->
-	    					<td style="visibility: hidden; display: none" id="lien_2"></td>
-	    					<td style="visibility: hidden; display: none" id="idSalle_2"></td>
+	    					<td style="visibility:hidden;display:none" id="lien_2"></td>
+	    					<td style="visibility:hidden;display:none" id="idSalle_2"></td>
 	    				</tr>
-	    				<tr id="res_3" style="visibility: hidden; display: none">
+	    				<tr id="res_3" style="visibility:hidden;display:none">
 	    					<td style="text-align:left;" id="nomSalle_3"></td>
-	    					<td style="text-align:center" id="note_3"></td>
+	    					<td style="text-align:left" id="note_3"></td>
 	    					<!-- bouton, onclick ouvre la page du lien associé à sa ligne -->
 	    					<td style="text-align:right;"><input type="radio" name="radio_buton_choice" value="choix 3"/></td>
 	    					<!-- lien, et idSalle toujours caché -->
-	    					<td style="visibility: hidden; display: none" id="lien_3"></td>
-	    					<td style="visibility: hidden; display: none" id="idSalle_3"></td>
+	    					<td style="visibility:hidden;display:none" id="lien_3"></td>
+	    					<td style="visibility:hidden;display:none" id="idSalle_3"></td>
 	    				</tr>
 	    			</table>
-	    		<div id="div_results" style="visibility: hidden; display: none">
+	    		<div id="div_results" style="visibility:hidden;display:none">
 	    			<p style="text-align:center;"><input type="submit" value="Choisir cette salle" onclick="launch_amas_feedback_choice('<?php echo plugins_url();?>')"/></p>
 	    			<p id="retour_feedback"></p>
 	    		</div>

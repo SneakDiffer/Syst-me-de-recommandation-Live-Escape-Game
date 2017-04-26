@@ -248,3 +248,9 @@ function unset_choix_Salle() {
 	document.getElementById("selected_salle").innerHTML = "" ;
 }
 
+
+
+
+function show_range_value(id_range, id_show) {
+	document.getElementById(id_show).innerHTML = document.getElementById(id_range).value;
+}
