@@ -79,6 +79,23 @@
 					REFERENCES wp_system_recommandation_salles(ID),
 					PRIMARY KEY(ID)
 					);");
+
+					$wpdb->query("CREATE TABLE  IF NOT EXISTS {$wpdb->prefix}system_recommandation_configuration
+					(
+					ID int NOT NULL AUTO_INCREMENT,
+					increment_feedback_choix float NOT NULL 
+					DEFAULT 1.0,
+					nb_max_feedback_choix_jour INT NOT NULL 
+					DEFAULT 3,
+					increment_feedback_saisienote float NOT NULL 
+					DEFAULT 2.0,
+					nb_max_feedback_saisienote_jour INT NOT NULL 
+					DEFAULT 2,
+					PRIMARY KEY(ID)
+					);");
+
+					/* inserer une configuration de base */
+					$wpdb->insert("{$wpdb->prefix}system_recommandation_configuration", array('ID'=>NULL, 'increment_feedback_choix'=>1.0, 'nb_max_feedback_choix_jour'=>3, 'increment_feedback_saisienote'=>2.0, 'nb_max_feedback_saisienote_jour'=>2), array('%d','%f','%d','%f','%d'));
 		}
 
 		//Delet the table
@@ -92,5 +109,6 @@
 		    $wpdb->query("DROP TABLE IF EXISTS {$wpdb->prefix}system_recommandation_salles;");
 		    $wpdb->query("DROP TABLE IF EXISTS {$wpdb->prefix}system_recommandation_criteres;");
 		    $wpdb->query("DROP TABLE IF EXISTS {$wpdb->prefix}system_recommandation_themes;");
+		    $wpdb->query("DROP TABLE IF EXISTS {$wpdb->prefix}system_recommandation_configuration;");
 		}
 	}
