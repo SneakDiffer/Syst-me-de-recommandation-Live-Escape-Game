@@ -3,29 +3,55 @@
 	width:100%;
 	border-bottom: 1px solid #ddd;
 }
+#tab_critere td {
+    vertical-align:middle;
+}
+#tab_critere tr:hover {
+    background-color: #f5f5f5
+}
 
 #tab_saisieNote table, #tab_saisieNote th, #tab_saisieNote tr {
 	width:100%;
 	border-bottom: 1px solid #ddd;
+}
+#tab_saisieNote td {
+    vertical-align:middle;
+}
+#tab_saisieNote tr:hover {
+    background-color: #f5f5f5
 }
 
 #tab_expertise table, #tab_expertise th, #tab_expertise tr {
 	width:100%;
 	border-bottom: 1px solid #ddd;
 }
+#tab_expertise td {
+    vertical-align:middle;
+}
+#tab_expertise tr:hover {
+    background-color: #f5f5f5
+}
 
 #tab_expertise_2 table, #tab_expertise_2 th, #tab_expertise_2 tr {
 	width:100%;
 	border-bottom: 1px solid #ddd;
+}
+#tab_expertise_2 td {
+    vertical-align:middle;
+}
+#tab_expertise_2 tr:hover {
+    background-color: #f5f5f5
 }
 
 #tab_res table, #tab_res th, #tab_res tr, #tab_res td {
 	width:100%;
 	border-bottom: 1px solid #ddd;
 }
-
-tr:hover {
-	background-color: #f5f5f5
+#tab_res td {
+    vertical-align:middle;
+}
+#tab_res tr:hover {
+    background-color: #f5f5f5
 }
 
 .multiselect {
