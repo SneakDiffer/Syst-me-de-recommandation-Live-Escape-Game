@@ -22,7 +22,6 @@
 					}
 				}
 			}
-			//fclose($f);
 			return $listIdSalle;
 		}
 		
@@ -79,7 +78,7 @@
 			if (count($results) == 1) {
 				$ret[0] = $results[0];
 			} elseif (count($results) == 2) {
-				if ($results[0][1] > $results[0][1]) {
+				if ($results[0][1] > $results[1][1]) {
 					$ret[0] = $results[0];
 					$ret[1] = $results[1];
 				} else {
