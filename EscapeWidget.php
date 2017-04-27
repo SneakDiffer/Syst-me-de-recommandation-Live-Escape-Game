@@ -21,6 +21,7 @@
 						<td><label>Critères </label></td>
  						<td style="text-align:left">Pas important</td>
  						<td style="text-align:right">Important</td>
+ 						<td style="text-align:right">Valeur</td>
 					</tr>
 						<?php
 						global $wpdb;
@@ -32,7 +33,8 @@
 							?>
 							<tr>
 								<td><label><?php echo $row->Name ?></label></td>
-		                		<td colspan="2"><input type="range" style="width:90%" id="<?php echo $i ?>ID" value="50" min="1" max="100" step ="0.1" oninput="<?php echo $i ?>Output.value = <?php echo $i ?>Input.value"></input> </td>
+		                		<td colspan="2"><input type="range" style="width:90%" id="<?php echo $i ?>ID" value="50" min="1" max="100" step ="0.1" oninput="show_range_value('<?php echo $i ?>ID', '<?php echo $i ?>_value')"></input></td>
+		                		<td id="<?php echo $i ?>_value" style="text-align:right">50</td>
 		                   </tr>
 		                   <?php
 		                   $i += 1;

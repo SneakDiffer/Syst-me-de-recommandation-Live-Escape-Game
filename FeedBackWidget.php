@@ -39,6 +39,7 @@
 						<td><label>Critères </label></td>
  						<td style="text-align:left">Pas important</td>
  						<td style="text-align:right">Important</td>
+ 						<td style="text-align:right">Valeur</td>
 					</tr>
 						<?php
 						global $wpdb;
@@ -50,7 +51,8 @@
 							?>
 							<tr>
 								<td><label><?php echo $row->Name ?></label></td>
-		                		<td colspan="2"><input type="range" style="width:90%" id="<?php echo $i ?>IDsaisieNote" value="50" min="1" max="100" step ="0.1" oninput="<?php echo $i ?>Output.value = <?php echo $i ?>Input.value"></input> </td>
+		                		<td colspan="2"><input type="range" style="width:90%" id="<?php echo $i ?>IDsaisieNote" value="50" min="1" max="100" step ="0.1" oninput="show_range_value('<?php echo $i ?>IDsaisieNote', '<?php echo $i ?>_2_value')"></input> </td>
+		                		<td id="<?php echo $i ?>_2_value" style="text-align:right">50</td>
 		                   </tr>
 		                   <?php
 		                   $i += 1;
@@ -58,10 +60,11 @@
 						?>
     			</table>
     			<table id="tab_expertise_2" style="width:100%">
-    				<tr><td>expertise</td><td style="text-align:left">faible</td><td style="text-align:right">elevée</td></tr>
+    				<tr><td>expertise</td><td style="text-align:left">faible</td><td style="text-align:right">elevée</td><td style="text-align:right">Valeur</td></tr>
 					<tr>
 						<td>expertise</td>
-						<td colspan="2"><input type="range" style="width:90%" id="id_expertise_2" value="50" min="1" max="100" step ="0.1" oninput="<?php echo $i ?>Output.value = <?php echo $i ?>Input.value"></input></td>
+						<td colspan="2"><input type="range" style="width:90%" id="id_expertise_2" value="50" min="1" max="100" step ="0.1" oninput="show_range_value('id_expertise_2', 'expertise_2_value')"></input></td>
+						<td id="expertise_2_value" style="text-align:right">50</td>
 					</tr>   				
     			</table>
     			<input type="submit" style="text-align:center" value="Envoyer le formulaire" onclick="launch_amas_feedback_saisieNotes('<?php echo plugins_url();?>')"/>
