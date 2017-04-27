@@ -225,22 +225,15 @@ class configuration_plugin {
 
 		<br/><a class="row-title">Gestion des feedbacks choix </a><br/>
 
-		  <!--<?php
-		  $feedbacks = $wpdb->get_results("SELECT id_salle,Date,IP,Modifications FROM wp_system_recommandation_log_feedback_choix ");
-		  foreach($feedbacks as $feedback){
-		  	?>
-		  	<option><?php echo $feedback->Modifications ?></option>
-		  	<?php
-		  }?>-->
 	<?php
-	$feedbacks = $wpdb->get_results("SELECT id_salle,Date,IP,Modifications FROM wp_system_recommandation_log_feedback_choix ");
+	$feedbacks = $wpdb->get_results("SELECT ID,id_salle,Date,IP,Modifications FROM wp_system_recommandation_log_feedback_choix ");
 	?>
    <div style="width:90%; height:200px; overflow:auto;">
     <table style="width:90%;">
     	<tr>
 			<td><a class="row-title">IP </a></td>
 			<td><a class="row-title">Date </a></td>
-		    <td><a class="row-title">Nom salle</a></td>
+		    <td><a class="row-title">Salle</a></td>
 			<?php
 			foreach ( $critere_colum as $critere ) 
 			{?>
@@ -256,11 +249,20 @@ class configuration_plugin {
 			<td><?php echo $feedback->IP ?></td>
 			<td><?php echo $feedback->Date ?></td>
 			<td><?php echo $salle ?></td>
+			<?php
+			$changement_note = explode(";;", $feedback->Modifications);
+			for($i=0;$i<count($changement_note);$i++){
+				$poid = explode(";",$changement_note[$i]);
+				?><td><?php echo $poid[1] ?></td><?php
+			}
+			?>
+			<td><input type="submit"  class="button" value="Supprimer" onclick="Suppression_feedback_choix('<?php echo plugins_url();?>','<?php echo $feedback->ID?>')"></td>
 			</tr>
 			<?php
 		}?>
     </table>  
    </div>
+
 
 		<?php
 	}

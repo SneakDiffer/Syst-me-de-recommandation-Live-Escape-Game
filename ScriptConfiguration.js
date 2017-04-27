@@ -47,7 +47,7 @@ function Gestion_Salle(path,ID_theme,theme){
 		if (this.readyState == 4 && this.status == 200) {actualise();}
 	};
 	
-	xhttp.open("GET", requete, true);
+	xhttp.open("GET", requete, false);
 	xhttp.send();
 
 }
@@ -171,14 +171,10 @@ function Ajout_theme(path){
 		// code for IE6, IE5
 		xhttp = new ActiveXObject("Microsoft.XMLHTTP");
 	}
-	/* fonction synchrone */
-	xhttp.onreadystatechange = function() {
-		/* si la réponse est correcte */
-		if (this.readyState == 4 && this.status == 200) {actualise();}
-	};
 
 	var requete = path + "/Systeme-de-recommandation-de-Live-Escape-Game/Launcher_New_Theme.php?q=" + theme;
-	xhttp.open("GET", requete, true);
+	actualise();
+	xhttp.open("GET", requete, false);
 	xhttp.send();
 }
 
@@ -192,14 +188,10 @@ function Suppression_theme(path){
 		// code for IE6, IE5
 		xhttp = new ActiveXObject("Microsoft.XMLHTTP");
 	}
-	/* fonction synchrone */
-	xhttp.onreadystatechange = function() {
-		/* si la réponse est correcte */
-		if (this.readyState == 4 && this.status == 200) {actualise();}
-	};
 
 	var requete = path + "/Systeme-de-recommandation-de-Live-Escape-Game/Launcher_Delete_Theme.php?q=" + theme;
-	xhttp.open("GET", requete, true);
+	actualise();
+	xhttp.open("GET", requete, false);
 	xhttp.send();
 }
 
@@ -213,15 +205,10 @@ function Suppression_Salle(path,nom_salle){
 		// code for IE6, IE5
 		xhttp = new ActiveXObject("Microsoft.XMLHTTP");
 	}
-	/* fonction synchrone */
-	xhttp.onreadystatechange = function() {
-		/* si la réponse est correcte */
-		if (this.readyState == 4 && this.status == 200) {actualise();}
-		else{alert("Erreur dans le formulaire de moficiation");}
-	};
 
 	var requete = path + "/Systeme-de-recommandation-de-Live-Escape-Game/Launcher_Delete_Salle.php?q=" + nom_salle;
-	xhttp.open("GET", requete, true);
+	actualise();
+	xhttp.open("GET", requete, false);
 	xhttp.send();
 }
 
@@ -235,15 +222,10 @@ function Suppression_critere(path){
 		// code for IE6, IE5
 		xhttp = new ActiveXObject("Microsoft.XMLHTTP");
 	}
-	/* fonction synchrone */
-	xhttp.onreadystatechange = function() {
-		/* si la réponse est correcte */
-		if (this.readyState == 4 && this.status == 200) {actualise();}
-		else{alert("Erreur dans le formulaire de moficiation");}
-	};
 
 	var requete = path + "/Systeme-de-recommandation-de-Live-Escape-Game/Launcher_Delete_Critere.php?q=" + critere;
-	xhttp.open("GET", requete, true);
+	actualise();
+	xhttp.open("GET", requete, false);
 	xhttp.send();
 }
 
@@ -256,14 +238,23 @@ function Ajout_critere(path){
 		// code for IE6, IE5
 		xhttp = new ActiveXObject("Microsoft.XMLHTTP");
 	}
-	/* fonction synchrone */
-	xhttp.onreadystatechange = function() {
-		/* si la réponse est correcte */
-		if (this.readyState == 4 && this.status == 200) {actualise();}
-		else{alert("Erreur dans le formulaire de moficiation");}
-	};
 
 	var requete = path + "/Systeme-de-recommandation-de-Live-Escape-Game/Launcher_New_Critere.php?q=" + critere;
-	xhttp.open("GET", requete, true);
+	actualise();
+	xhttp.open("GET", requete, false);
+	xhttp.send();
+}
+
+function Suppression_feedback_choix(path,ID){
+	var xhttp;
+	if (window.XMLHttpRequest) {
+		xhttp = new XMLHttpRequest();
+		} else {
+		// code for IE6, IE5
+		xhttp = new ActiveXObject("Microsoft.XMLHTTP");
+	}
+	var requete = path + "/Systeme-de-recommandation-de-Live-Escape-Game/Launcher_Delete_Feedback_choix.php?q=" + ID;
+	actualise();
+	xhttp.open("GET", requete, false);
 	xhttp.send();
 }
