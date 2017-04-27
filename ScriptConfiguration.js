@@ -258,3 +258,19 @@ function Suppression_feedback_choix(path,ID){
 	xhttp.open("GET", requete, false);
 	xhttp.send();
 }
+
+function Suppression_feedback_saisienotes(path,ID){
+	var xhttp;
+	if (window.XMLHttpRequest) {
+		xhttp = new XMLHttpRequest();
+		} else {
+		// code for IE6, IE5
+		xhttp = new ActiveXObject("Microsoft.XMLHTTP");
+	}
+	var requete = path + "/Systeme-de-recommandation-de-Live-Escape-Game/Launcher_Delete_Feedback_saisienotes.php?q=" + ID;
+	actualise();
+	xhttp.open("GET", requete, false);
+	xhttp.send();
+}
+
+

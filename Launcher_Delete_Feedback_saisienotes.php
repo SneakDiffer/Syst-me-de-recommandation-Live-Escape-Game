@@ -4,8 +4,8 @@
 	/* "ID du log à supprimer" */
 	$q = $_REQUEST["q"];
 
-	$Modifications = $wpdb->get_var( "SELECT Modifications FROM wp_system_recommandation_log_feedback_choix WHERE ID = '$q'");
-	$Salle = $wpdb->get_var( "SELECT id_salle FROM wp_system_recommandation_log_feedback_choix WHERE ID = '$q'");
+	$Modifications = $wpdb->get_var( "SELECT Modifications FROM wp_system_recommandation_log_feedback_saisienotes WHERE ID = '$q'");
+	$Salle = $wpdb->get_var( "SELECT id_salle FROM wp_system_recommandation_log_feedback_saisienotes WHERE ID = '$q'");
 	$changement_note = explode(";;", $Modifications);
 
 	for($i=0;$i<count($changement_note);$i++){
@@ -14,4 +14,4 @@
 		$note_modifie = $note_actuelle - $idcritere_poid[1];
 		$wpdb->query("UPDATE wp_system_recommandation_notes SET note = '" . $note_modifie . "' WHERE id_salle = " . $Salle . " AND id_critere = " . $idcritere_poid[0]);
 	}
-	$wpdb->delete('wp_system_recommandation_log_feedback_choix', array('ID'=>$q), array('%d'));
+	$wpdb->delete('wp_system_recommandation_log_feedback_saisienotes', array('ID'=>$q), array('%d'));

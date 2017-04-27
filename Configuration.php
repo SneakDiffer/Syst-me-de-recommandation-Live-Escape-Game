@@ -24,7 +24,7 @@ class configuration_plugin {
 			<tr>
 		       <td><a class="row-title">Nom salle</a></td>
 				<?php
-				
+				//Affichage des critères présent dans le bdd
 				$critere_colum = $wpdb->get_results( "SELECT Name FROM {$wpdb->prefix}system_recommandation_criteres");
 				foreach ( $critere_colum as $critere ) 
 				{
@@ -251,12 +251,78 @@ class configuration_plugin {
 			<td><?php echo $salle ?></td>
 			<?php
 			$changement_note = explode(";;", $feedback->Modifications);
-			for($i=0;$i<count($changement_note);$i++){
+			$nb_changement = 0;
+			for($i=0;$i<count($critere_colum);$i++){
 				$poid = explode(";",$changement_note[$i]);
-				?><td><?php echo $poid[1] ?></td><?php
+				//Il n'y a pas eu de changement sur ce critère
+				if(count($poid) == 1){
+					?><td></td><?php
+				}else{
+					//On rajoute un + si c'est une note positive. Question d'esthétisme
+					$positif = explode("-",$poid[1]);
+					if (count($positif) == 1){
+						?><td>+<?php echo $poid[1] ?></td><?php
+					}else{
+						?><td><?php echo $poid[1] ?></td><?php
+					}
+					$nb_changement += 1;
+				}
+				
 			}
 			?>
-			<td><input type="submit"  class="button" value="Supprimer" onclick="Suppression_feedback_choix('<?php echo plugins_url();?>','<?php echo $feedback->ID?>')"></td>
+			<td><input type="submit"  class="button" value="Retirer la modification" onclick="Suppression_feedback_choix('<?php echo plugins_url();?>','<?php echo $feedback->ID?>')"></td>
+			</tr>
+			<?php
+		}?>
+    </table>  
+   </div>
+
+
+
+	<br/><a class="row-title">Gestion des feedbacks saisie de notes </a><br/>
+   <?php
+	$feedbacks = $wpdb->get_results("SELECT ID,id_salle,Date,IP,Modifications FROM wp_system_recommandation_log_feedback_saisienotes ");
+	?>
+   <div style="width:90%; height:200px; overflow:auto;">
+    <table style="width:90%;">
+    	<tr>
+			<td><a class="row-title">IP </a></td>
+			<td><a class="row-title">Date </a></td>
+		    <td><a class="row-title">Salle</a></td>
+			<?php
+			foreach ( $critere_colum as $critere ) 
+			{?>
+				<td><a class="row-title"><?php echo $critere->Name ?></a></td>
+			<?php
+			}?>
+		</tr>
+		<?php
+		foreach ( $feedbacks as $feedback ){
+			$salle = $wpdb->get_var("SELECT Name FROM wp_system_recommandation_salles WHERE ID = '$feedback->id_salle'");
+			?>
+			<tr>
+			<td><?php echo $feedback->IP ?></td>
+			<td><?php echo $feedback->Date ?></td>
+			<td><?php echo $salle ?></td>
+			<?php
+			$changement_note = explode(";;", $feedback->Modifications);
+			for($i=0;$i<count($critere_colum);$i++){
+				$poid = explode(";",$changement_note[$i]);
+				//Il n'y a pas eu de changement sur ce critère
+				if(count($poid) == 1){
+					?><td></td><?php
+				}else{
+					//On rajoute un + si c'est une note positive. Question d'esthétisme
+					$positif = explode("-",$poid[1]);
+					if (count($positif) == 1){
+						?><td>+<?php echo $poid[1] ?></td><?php
+					}else{
+						?><td><?php echo $poid[1] ?></td><?php
+					}
+				}	
+			}
+			?>
+			<td><input type="submit"  class="button" value="Retirer la modification" onclick="Suppression_feedback_saisienotes('<?php echo plugins_url();?>','<?php echo $feedback->ID?>')"></td>
 			</tr>
 			<?php
 		}?>
