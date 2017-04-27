@@ -1,4 +1,8 @@
+function actualise() {
+  window.location.reload()
+}
 
+//Ajoute une nouvelle salle
 function Gestion_Salle(path,ID_theme,theme){
 
 	//Récupération du nombre de lignes
@@ -40,11 +44,12 @@ function Gestion_Salle(path,ID_theme,theme){
 	//fonction synchrone
 	xhttp.onreadystatechange = function() {
 		//si la réponse est correcte 
-		if (this.readyState == 4 && this.status == 200) {}
+		if (this.readyState == 4 && this.status == 200) {actualise();}
 	};
 	
 	xhttp.open("GET", requete, true);
 	xhttp.send();
+
 }
 
 
@@ -75,34 +80,30 @@ function Gestion_Note(path){
 		// code for IE6, IE5
 		xhttp = new ActiveXObject("Microsoft.XMLHTTP");
 	}
-	/* fonction synchrone */
-	xhttp.onreadystatechange = function() {
-		/* si la réponse est correcte */
-		if (this.readyState == 4 && this.status == 200) {}
-	};
-
+	
 	var arrayLignes = document.getElementById("ID_table_configuration").rows;
 	//-3 car colonne nomsalle, Theme, Lien
 	var NbCritere = arrayLignes[0].cells.length - 3;
+	//-2 car ligne de présentation des colonnes + ligne nouvelle salle
 	var nbsalle = arrayLignes.length - 2;
-	var NoteCritere = "";
-	for(j=0;j<nbsalle;j++){
+
+	for(salle=0;salle<nbsalle;salle++){
+		var nom_salle = document.getElementById("Salle"+salle).value;
 		NoteCritere = "";
 		for(i=0;i<NbCritere;i++){
-			var Note = document.getElementById(""+i+j).value;
+			var Note = document.getElementById(""+i+salle).value;
 			NoteCritere = NoteCritere + Note + ";";
 		}
 		NoteCritere = NoteCritere.substring(0, NoteCritere.length-1);
-	    NoteCritere = NoteCritere + "/" + j;
+	    NoteCritere = NoteCritere + "/" + nom_salle;
 	    var requete = path + "/Systeme-de-recommandation-de-Live-Escape-Game/Launcher_Note.php?q=" + NoteCritere;
-	    xhttp.open("GET", requete, true);
+	    xhttp.open("GET", requete, false);
 		xhttp.send();
 	}
 }
 
 function Gestion_Theme(path,theme){
 	/* créer la requete php : path + nomPlugin + nomFichier + parametre */
-	
 	var xhttp;
 	if (window.XMLHttpRequest) {
 		xhttp = new XMLHttpRequest();
@@ -110,11 +111,6 @@ function Gestion_Theme(path,theme){
 		// code for IE6, IE5
 		xhttp = new ActiveXObject("Microsoft.XMLHTTP");
 	}
-	/* fonction synchrone */
-	xhttp.onreadystatechange = function() {
-		/* si la réponse est correcte */
-		if (this.readyState == 4 && this.status == 200) {}
-	};
 
 	var arrayLignes = document.getElementById("ID_table_configuration").rows;
 	//-2 car première ligne nom des colonnes, dernière ligne ajout d'une nouvelle salles
@@ -137,10 +133,10 @@ function Gestion_Theme(path,theme){
 	    	ListeTheme = ListeTheme + "/" + j;
 	    }
 	    var requete = path + "/Systeme-de-recommandation-de-Live-Escape-Game/Launcher_Theme.php?q=" + ListeTheme;
-	    xhttp.open("GET", requete, true);
+	    xhttp.open("GET", requete, false);
 		xhttp.send();
 	}
-	alert("Les thèmes ont été modifiés");
+	//alert("Les thèmes ont été modifiés");
 }
 
 
@@ -152,12 +148,6 @@ function Gestion_Lien(path){
 		// code for IE6, IE5
 		xhttp = new ActiveXObject("Microsoft.XMLHTTP");
 	}
-	/* fonction synchrone */
-	xhttp.onreadystatechange = function() {
-		/* si la réponse est correcte */
-		if (this.readyState == 4 && this.status == 200) {}
-	};
-
 
 	var arrayLignes = document.getElementById("ID_table_configuration").rows;
 	var nbsalle = arrayLignes.length - 2;
@@ -165,7 +155,7 @@ function Gestion_Lien(path){
 		var Lien = document.getElementById("Lien"+i).value;
 		Lien = Lien + ";" + i;
 		var requete = path + "/Systeme-de-recommandation-de-Live-Escape-Game/Launcher_Lien.php?q=" + Lien;
-	    xhttp.open("GET", requete, true);
+	    xhttp.open("GET", requete, false);
 		xhttp.send();
 	}
 }
@@ -184,7 +174,7 @@ function Ajout_theme(path){
 	/* fonction synchrone */
 	xhttp.onreadystatechange = function() {
 		/* si la réponse est correcte */
-		if (this.readyState == 4 && this.status == 200) {}
+		if (this.readyState == 4 && this.status == 200) {actualise();}
 	};
 
 	var requete = path + "/Systeme-de-recommandation-de-Live-Escape-Game/Launcher_New_Theme.php?q=" + theme;
@@ -205,7 +195,7 @@ function Suppression_theme(path){
 	/* fonction synchrone */
 	xhttp.onreadystatechange = function() {
 		/* si la réponse est correcte */
-		if (this.readyState == 4 && this.status == 200) {}
+		if (this.readyState == 4 && this.status == 200) {actualise();}
 	};
 
 	var requete = path + "/Systeme-de-recommandation-de-Live-Escape-Game/Launcher_Delete_Theme.php?q=" + theme;
@@ -226,7 +216,8 @@ function Suppression_Salle(path,nom_salle){
 	/* fonction synchrone */
 	xhttp.onreadystatechange = function() {
 		/* si la réponse est correcte */
-		if (this.readyState == 4 && this.status == 200) {}
+		if (this.readyState == 4 && this.status == 200) {actualise();}
+		else{alert("Erreur dans le formulaire de moficiation");}
 	};
 
 	var requete = path + "/Systeme-de-recommandation-de-Live-Escape-Game/Launcher_Delete_Salle.php?q=" + nom_salle;
@@ -247,7 +238,8 @@ function Suppression_critere(path){
 	/* fonction synchrone */
 	xhttp.onreadystatechange = function() {
 		/* si la réponse est correcte */
-		if (this.readyState == 4 && this.status == 200) {}
+		if (this.readyState == 4 && this.status == 200) {actualise();}
+		else{alert("Erreur dans le formulaire de moficiation");}
 	};
 
 	var requete = path + "/Systeme-de-recommandation-de-Live-Escape-Game/Launcher_Delete_Critere.php?q=" + critere;
@@ -267,7 +259,8 @@ function Ajout_critere(path){
 	/* fonction synchrone */
 	xhttp.onreadystatechange = function() {
 		/* si la réponse est correcte */
-		if (this.readyState == 4 && this.status == 200) {}
+		if (this.readyState == 4 && this.status == 200) {actualise();}
+		else{alert("Erreur dans le formulaire de moficiation");}
 	};
 
 	var requete = path + "/Systeme-de-recommandation-de-Live-Escape-Game/Launcher_New_Critere.php?q=" + critere;

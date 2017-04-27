@@ -1,17 +1,21 @@
 <?php
 	require_once('../../../wp-config.php');
 	/* récupérer les paramètres de la requete */
-	/* "Thème1;Thème2...." */
+	/* "notecritère1;notecritère2;.../nomsalle" */
 	$q = $_REQUEST["q"];
 	$param = explode("/", $q);
 	
 	global $wpdb;
 
-	$all_room = $wpdb->get_results( "SELECT ID FROM {$wpdb->prefix}system_recommandation_salles");
-	$ID_Room = $all_room[$param[1]]->ID;
+	$ID_Room = $wpdb->get_var( "SELECT ID FROM {$wpdb->prefix}system_recommandation_salles WHERE Name = '$param[1]'");
+
 	$notes = explode(";", $param[0]);
+	$critere_colum = $wpdb->get_results( "SELECT ID FROM {$wpdb->prefix}system_recommandation_criteres");
+	$all_critere = array();
+	foreach ( $critere_colum as $critere){
+		array_push($all_critere,$critere->ID);
+	}
 	
 	for($i = 0; $i < count($notes); $i ++){
-			$id_critere = $i + 1;
-				$wpdb->query("UPDATE {$wpdb->prefix}system_recommandation_notes SET note = '" . $notes[$i] . "' WHERE id_salle = " . $ID_Room . " AND id_critere = " . $id_critere);
+			$wpdb->query("UPDATE {$wpdb->prefix}system_recommandation_notes SET note = '" . $notes[$i] . "' WHERE id_salle = " . $ID_Room . " AND id_critere = " . $all_critere[$i]);
 	}

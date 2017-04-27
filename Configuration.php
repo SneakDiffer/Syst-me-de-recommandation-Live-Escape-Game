@@ -19,17 +19,17 @@ class configuration_plugin {
 		?>
 
 		<h1 class="wp-heading-inline">Veuillez configurer votre plugin</h1><br/><br/><br/>
-		<table id="ID_table_configuration" style="width:100%">
+		<table id="ID_table_configuration" style="width:100%; height:200px;overflow:auto;">
 		<thead>
 			<tr>
 		       <td><a class="row-title">Nom salle</a></td>
 				<?php
 				
 				$critere_colum = $wpdb->get_results( "SELECT Name FROM {$wpdb->prefix}system_recommandation_criteres");
-				foreach ( $critere_colum as $row ) 
+				foreach ( $critere_colum as $critere ) 
 				{
 				?>
-					<td><a class="row-title"><?php echo $row->Name ?></a></td>
+					<td><a class="row-title"><?php echo $critere->Name ?></a></td>
 				<?php
 				}
 				?>
@@ -64,7 +64,7 @@ class configuration_plugin {
 					?>
 					<tr>
 						<!-- Affichage nom -->
-						<td><?php echo $room->Name ?></td>
+						<td><input type="text" id="Salle<?php echo $i ?>" value='<?php echo $room->Name ?>'></td>
 
 						<!-- Affichage notes -->
 						<?php
@@ -222,6 +222,45 @@ class configuration_plugin {
 			</tr>
 		</thead> 
 		</table>
+
+		<br/><a class="row-title">Gestion des feedbacks choix </a><br/>
+
+		  <!--<?php
+		  $feedbacks = $wpdb->get_results("SELECT id_salle,Date,IP,Modifications FROM wp_system_recommandation_log_feedback_choix ");
+		  foreach($feedbacks as $feedback){
+		  	?>
+		  	<option><?php echo $feedback->Modifications ?></option>
+		  	<?php
+		  }?>-->
+	<?php
+	$feedbacks = $wpdb->get_results("SELECT id_salle,Date,IP,Modifications FROM wp_system_recommandation_log_feedback_choix ");
+	?>
+   <div style="width:90%; height:200px; overflow:auto;">
+    <table style="width:90%;">
+    	<tr>
+			<td><a class="row-title">IP </a></td>
+			<td><a class="row-title">Date </a></td>
+		    <td><a class="row-title">Nom salle</a></td>
+			<?php
+			foreach ( $critere_colum as $critere ) 
+			{?>
+				<td><a class="row-title"><?php echo $critere->Name ?></a></td>
+			<?php
+			}?>
+		</tr>
+		<?php
+		foreach ( $feedbacks as $feedback ){
+			$salle = $wpdb->get_var("SELECT Name FROM wp_system_recommandation_salles WHERE ID = '$feedback->id_salle'");
+			?>
+			<tr>
+			<td><?php echo $feedback->IP ?></td>
+			<td><?php echo $feedback->Date ?></td>
+			<td><?php echo $salle ?></td>
+			</tr>
+			<?php
+		}?>
+    </table>  
+   </div>
 
 		<?php
 	}
