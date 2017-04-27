@@ -136,7 +136,7 @@ function launch_amas_feedback_choice(path) {
 			/* récupérer l'id de la salle */
 			idSalle = document.getElementById("idSalle_" + choix).innerHTML;
 			/* ouvrir le lien de la salles */
-			var newPage = window.open(document.getElementById('lien_'+choix).innerHTML, '_blank', 'toolbar=0,location=0,menubar=0');
+			var newPage = window.open(document.getElementById('lien_'+choix).innerHTML, '_blank', 'location=0');
 		}
 	}
 	/* récuperer le nombre de critères */
