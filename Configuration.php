@@ -2,7 +2,7 @@
 class configuration_plugin {
 	
 	function my_plugin_menu() {
-		add_options_page( 'Configuration du plugin Escape Game', 'Configuration Escape Game', 'manage_options', None, array( $this, 'my_plugin_options' ) );
+		add_options_page( 'Configuration systeme d\'aide a la decision', 'Configuration systeme d\'aide a la decision', 'manage_options', None, array( $this, 'my_plugin_options' ) );
 		add_action('admin_enqueue_scripts', array(&$this, 'enqueueScripts'));
 	}
 	/*Importation du script */
@@ -81,8 +81,8 @@ class configuration_plugin {
 						?>
 
 						<!-- Affichage thème -->
-						<td>
-						<div class="selectBox" onclick="showCheckboxes('<?php echo $i?>')">
+						<td >
+						<div class="selectBox" onclick="showCheckboxes('<?php echo $i?>')" >
 						      <select>
 						        <option>Gestion des thèmes</option>
 						      </select>
@@ -116,11 +116,12 @@ class configuration_plugin {
 							<td>
 								<!--<?php echo $link->lien ?>-->
 								<input type="text" id="Lien<?php echo $i ?>" value='<?php echo $link->lien ?>'>
-								<input type="submit" class="button" id="Supprimer<?php echo $i ?>" value="Supprimer" onclick="Suppression_Salle('<?php echo plugins_url();?>','<?php echo $room->Name?>')">
+								
 							</td>
 						<?php
 						}
 						?>
+						<td><input type="submit" class="button" id="Supprimer<?php echo $i ?>" value="Supprimer" onclick="Suppression_Salle('<?php echo plugins_url();?>','<?php echo $room->Name?>')"></td>
 					</tr>
 					
 			<?php
@@ -169,6 +170,7 @@ class configuration_plugin {
 		<input type="submit"  class="button" value="Modifier les liens" onclick="Gestion_Lien('<?php echo plugins_url();?>')">
 		<input type="submit" class="button" value="Ajouter la salle" onclick="Gestion_Salle('<?php echo plugins_url();?>',<?php echo count($critere_colum) + 1 ?>,<?php echo htmlspecialchars(json_encode($All_Theme)) ?>)"/>
 		<br/><br/><br/>
+
 
 		<a class="row-title">Gestion des thèmes </a><br/>
 		<select ID="ListeGestionTheme" size="10" multiple style="width:50%;">
@@ -329,7 +331,27 @@ class configuration_plugin {
     </table>  
    </div>
 
-
+   <?php
+   $coeff1 = $wpdb->get_var("SELECT increment_feedback_choix FROM wp_system_recommandation_configuration WHERE ID = 1");
+   $coeff2 = $wpdb->get_var("SELECT nb_max_feedback_choix_jour FROM wp_system_recommandation_configuration WHERE ID = 1");
+   $coeff3 = $wpdb->get_var("SELECT increment_feedback_saisienote FROM wp_system_recommandation_configuration WHERE ID = 1");
+   $coeff4 = $wpdb->get_var("SELECT nb_max_feedback_saisienote_jour FROM wp_system_recommandation_configuration WHERE ID = 1");
+   ?>
+	<table>
+			<tr>
+				<td>L'incrément du feedback choix d'une salle ? </td>
+				<td>Le nombre maximum de feedback choix par jours ? </td>
+				<td>L'incrément du feedback saisie de note ? </td>
+				<td>Le nombre maximum de feedback saise de note par jours ? </td>
+			</tr>
+			<tr>
+				<td><input type="text" id="increment_feedback_choix" value='<?php echo $coeff1 ?>'></td>
+				<td><input type="text" id="nb_max_feedback_choix_jour" value='<?php echo $coeff2 ?>'></td>
+				<td><input type="text" id="increment_feedback_saisienote" value='<?php echo $coeff3 ?>'></td>
+				<td><input type="text" id="nb_max_feedback_saisienote_jour" value='<?php echo $coeff4 ?>'></td>
+			</tr>
+		</table>
+		<input type="submit"  class="button" value="Mettre à jours les coefficients" onclick="Maj_coefficients('<?php echo plugins_url();?>')">
 		<?php
 	}
 }
