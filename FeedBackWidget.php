@@ -39,7 +39,7 @@
 						<td><label>Critères </label></td>
  						<td style="text-align:left">Pas important</td>
  						<td style="text-align:right">Important</td>
- 						<td style="text-align:right">Valeur</td>
+ 						<td></td>
 					</tr>
 						<?php
 						global $wpdb;
@@ -60,9 +60,9 @@
 						?>
     			</table>
     			<table id="tab_expertise_2" style="width:100%">
-    				<tr><td>expertise</td><td style="text-align:left">faible</td><td style="text-align:right">elevée</td><td style="text-align:right">Valeur</td></tr>
+    				<tr><td><label>Expertise</label></td><td style="text-align:left">Faible</td><td style="text-align:right">Elevée</td><td></td></tr>
 					<tr>
-						<td>expertise</td>
+						<td><label>Expertise</label></td>
 						<td colspan="2"><input type="range" style="width:90%" id="id_expertise_2" value="50" min="1" max="100" step ="0.1" oninput="show_range_value('id_expertise_2', 'expertise_2_value')"></input></td>
 						<td id="expertise_2_value" style="text-align:right">50</td>
 					</tr>   				

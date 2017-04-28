@@ -162,7 +162,7 @@ function launch_amas_feedback_choice(path) {
 		/* si la réponse est correcte */
 		if (this.readyState == 4 && this.status == 200) {
 			if (this.responseText == "") {
-				newPage.alert("Vous avez utilisé le feedback trop de fois\nPas de modification des notes");
+				newPage.alert("Vous avez utilisé le feedback trop de fois\nVotre choix ne modifie pas les notes");
 			}
 		}
 	};
@@ -199,9 +199,9 @@ function launch_amas_feedback_saisieNotes(path) {
 		/* si la réponse est correcte */
 		if (this.readyState == 4 && this.status == 200) {
 			if (this.responseText == "") {
-				alert("Vous avez utilisé le feedback trop de fois\nPas de modification des notes");
+				alert("Vous avez utilisé le feedback trop de fois\nVotre notation ne modifie pas les notes");
 			} else {
-				alert("BDD modifiée");
+				alert("Votre notation a modifié les notes");
 			}
 		}
 	};
