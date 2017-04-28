@@ -274,3 +274,22 @@ function Suppression_feedback_saisienotes(path,ID){
 }
 
 
+function Maj_coefficients(path){
+	var coeff = "";
+	coeff += document.getElementById("increment_feedback_choix").value;
+	coeff += ";" + document.getElementById("nb_max_feedback_choix_jour").value;
+	coeff += ";" + document.getElementById("increment_feedback_saisienote").value;
+	coeff += ";" + document.getElementById("nb_max_feedback_saisienote_jour").value;
+
+	var xhttp;
+	if (window.XMLHttpRequest) {
+		xhttp = new XMLHttpRequest();
+		} else {
+		// code for IE6, IE5
+		xhttp = new ActiveXObject("Microsoft.XMLHTTP");
+	}
+	var requete = path + "/Systeme-de-recommandation-de-Live-Escape-Game/Launcher_Coefficients.php?q=" + coeff;
+	actualise();
+	xhttp.open("GET", requete, false);
+	xhttp.send();
+}
