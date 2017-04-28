@@ -5,7 +5,7 @@
 	Plugin URI: https://github.com/Usanter/Systeme-de-recommandation-de-Live-Escape-Game
 	Author: VILLAIN Edouard / ROLLAND Thomas / DEFONTE Véronique / BRISBARE Kevin 
 	group : WeAreNotAlone
-	Version: 0.1
+	Version: 1.0
 	License: GPL2
 	*/
 
@@ -20,10 +20,10 @@
 	}
 	// get the plugin path
 	$path = plugins_url();
-	// then the full path to the scripts file 
+	// then the full path to the scripts and styles file 
 	$path_to_scripts = $path . "/Systeme-de-recommandation-de-Live-Escape-Game/scripts.js";
 	$path_to_style = $path . "/Systeme-de-recommandation-de-Live-Escape-Game/style.css";
-	// add the custom scripts to the widget  
+	// add the custom scripts and styles to the widget  
 	wp_enqueue_script('scripts.js', $path_to_scripts);
 	wp_enqueue_style('style.css', $path_to_style);
 	//Create the table on the database when the plugin is activate
