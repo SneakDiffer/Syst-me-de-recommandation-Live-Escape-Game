@@ -58,8 +58,8 @@
                         foreach ($result as $theme) {
 						?>
 						<tr><td>
-							<label for="<?php echo $i ?>">
-				        	<input type="checkbox" id="<?php echo $i ?>theme" value="<?php echo utf8_encode($theme->Name) ?>" onclick="close_menu_deroulant()"/><?php echo $theme->Name ?></label></td></tr>
+							<label for="<?php echo $i ?>theme">
+				        	<input type="checkbox" id="<?php echo $i ?>theme" value="<?php echo utf8_encode($theme->Name) ?>" "/><?php echo $theme->Name ?></label></td></tr>
 		                   <?php
 		                   $i += 1;
 						}
