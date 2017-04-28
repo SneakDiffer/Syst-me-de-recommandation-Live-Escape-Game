@@ -1,4 +1,5 @@
 <?php
+	//Modifie un feedback et le supprime de la bdd
 	require_once('../../../wp-config.php');
 	/* récupérer les paramètres de la requete */
 	/* "ID du log à supprimer" */

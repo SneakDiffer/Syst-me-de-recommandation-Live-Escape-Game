@@ -17,14 +17,15 @@ class configuration_plugin {
 		global $wpdb;
 
 		?>
-
 		<h1 class="wp-heading-inline">Veuillez configurer votre plugin</h1><br/><br/><br/>
+
+		<!-- Table de gestion des salles -->
 		<table id="ID_table_configuration" style="width:100%; height:200px;overflow:auto;">
 		<thead>
 			<tr>
 		       <td><a class="row-title">Nom salle</a></td>
 				<?php
-				//Affichage des critères présent dans le bdd
+				//Affichage des critères présent dans la bdd
 				$critere_colum = $wpdb->get_results( "SELECT Name FROM {$wpdb->prefix}system_recommandation_criteres");
 				foreach ( $critere_colum as $critere ) 
 				{
@@ -39,20 +40,21 @@ class configuration_plugin {
 		   	<?php
 		   	$all_room = $wpdb->get_results( "SELECT Name FROM {$wpdb->prefix}system_recommandation_salles");
 		   	$all_theme = $wpdb->get_results("SELECT Name FROM wp_system_recommandation_themes");
-		   	//Convertion en array simle
+		   	//Convertion en array simple
 		   	$All_Theme = array();
 		   	foreach ( $all_theme as $themes){
 		   		array_push($All_Theme,$themes->Name);
 		   	}
 		   	?>
 
-		   	<!-- Script de création des tableaux enable -->
+		   	<!-- Script de gestion des listes thèmes -->
 			<script  type='text/javascript'>	
 		    InitEnable(<?php echo count($all_room) + 1 ?>); 
 			</script>
 
 			<?php
 		   	$i = 0;	//Indice de salle
+		   	//Pour chaque salle on affiche le nom, les notes, les thèmes et le lien
 		   	foreach ( $all_room as $room ) 
 			{
 					$score_salle = $wpdb->get_results("select c.name, n.note from wp_system_recommandation_salles as s, wp_system_recommandation_notes as n,wp_system_recommandation_criteres as c where s.Name = '$room->Name' and s.id = n.id_salle and c.id = n.id_critere ORDER BY c.ID");
@@ -75,62 +77,59 @@ class configuration_plugin {
 							<td>
 								<input type="text" id="<?php echo $critere ?><?php echo $i ?>" value='<?php echo $score->note ?>'>
 							</td>
-						<?php
+							<?php
 							$critere = $critere + 1;
 						}
 						?>
 
-						<!-- Affichage thème -->
+						<!-- Affichage thèmes -->
 						<td >
-						<div class="selectBox" onclick="showCheckboxes('<?php echo $i?>')" >
-						      <select>
-						        <option>Gestion des thèmes</option>
-						      </select>
-						      <div class="overSelect" ></div>
-						      </div>
-						    <div id="checkboxes<?php echo $i ?>" style="display: none;">
-						    	<?php
-		                        foreach ($theme_note_checked as $themes) {
+							<div class="selectBox" onclick="showCheckboxes('<?php echo $i?>')" >
+								<select>
+									<option>Gestion des thèmes</option>
+								</select>
+								<div class="overSelect" ></div>
+							</div>
+							<div id="checkboxes<?php echo $i ?>" style="display: none;">
+								<?php
+								foreach ($theme_note_checked as $themes) {
 									?>
 									<input type="checkbox" id="<?php echo $themes?><?php echo $i ?>" /><?php echo $themes ?></br>
-							        <?php
+									<?php
 								}
-								//Car le explode avec une chaine vide rempli le premier element
+								//Gestion d'une chaine vide
 								if($theme_salle[0] != "")
 								{
 									foreach ($theme_salle as $themes) {
 										?>
 										<input type="checkbox" checked="checked" id="<?php echo $themes?><?php echo $i ?>" /><?php echo $themes ?></br>
-								        <?php
+										<?php
 									}
 								}
 								?>
-					 	</div>
+						 	</div>
 						</td>
 
 						<!-- Affichage Lien -->
 						<?php
 						foreach ( $link_salle as $link ) 
 						{
-						?>
-							<td>
-								<!--<?php echo $link->lien ?>-->
-								<input type="text" id="Lien<?php echo $i ?>" value='<?php echo $link->lien ?>'>
-								
-							</td>
-						<?php
+							?>
+							<td><input type="text" id="Lien<?php echo $i ?>" value='<?php echo $link->lien ?>'></td>
+							<?php
 						}
 						?>
 						<td><input type="submit" class="button" id="Supprimer<?php echo $i ?>" value="Supprimer" onclick="Suppression_Salle('<?php echo plugins_url();?>','<?php echo $room->Name?>')"></td>
 					</tr>
 					
-			<?php
-			$i += 1;
+				<?php
+				$i += 1;//Salle suivante
 			}
 		   	?>
+		   	<!-- Ligne pour ajouter une salle -->
 		   	<tr>
 		   		<?php
-		   		//Ligne pour ajouter une salle, + 3 car colonne nomsalle, Theme, Lien
+		   		//+ 3 car colonne nomsalle, Theme, Lien
 		   		for ($i = 0; $i < count($critere_colum) + 3;$i++){
 		   			//Gestion des thèmes
 		   			if($i == count($critere_colum) + 1){
@@ -164,6 +163,8 @@ class configuration_plugin {
 		   	</tr>
 		</thead> 
 		</table>
+
+		<!-- Boutons permettant la gestion des salles -->
 		<script type="text/javascript" src="ScriptConfiguration.js"></script>
 		<input type="submit"  class="button" value="Modifier les notes" onclick="Gestion_Note('<?php echo plugins_url();?>')">
 		<input type="submit"  class="button" value="Modifier les thèmes" onclick="Gestion_Theme('<?php echo plugins_url();?>',<?php echo htmlspecialchars(json_encode($All_Theme)) ?>)">
@@ -171,7 +172,7 @@ class configuration_plugin {
 		<input type="submit" class="button" value="Ajouter la salle" onclick="Gestion_Salle('<?php echo plugins_url();?>',<?php echo count($critere_colum) + 1 ?>,<?php echo htmlspecialchars(json_encode($All_Theme)) ?>)"/>
 		<br/><br/><br/>
 
-
+		<!-- Gestion des thèmes (Ajout / Suppression ) -->
 		<a class="row-title">Gestion des thèmes </a><br/>
 		<select ID="ListeGestionTheme" size="10" multiple style="width:50%;">
 		  <?php
@@ -199,6 +200,7 @@ class configuration_plugin {
 		</table>
 		<br/><br/>
 
+		<!-- Gestion des critères ( Ajout / Suppression ) -->
 		<a class="row-title">Gestion des critères </a><br/>
 		<select ID="ListeGestionCritere" size="10" multiple style="width:50%;">
 		  <?php
@@ -223,121 +225,125 @@ class configuration_plugin {
 				</td>
 			</tr>
 		</thead> 
-		</table>
+		</table><br/>
 
-		<br/><a class="row-title">Gestion des feedbacks choix </a><br/>
+		<!-- Gestion des feedback choix d'une salle -->
+		<a class="row-title">Gestion des feedbacks choix </a><br/>
 
-	<?php
-	$feedbacks = $wpdb->get_results("SELECT ID,id_salle,Date,IP,Modifications FROM wp_system_recommandation_log_feedback_choix ");
-	?>
-   <div style="width:90%; height:200px; overflow:auto;">
-    <table style="width:90%;">
-    	<tr>
-			<td><a class="row-title">IP </a></td>
-			<td><a class="row-title">Date </a></td>
-		    <td><a class="row-title">Salle</a></td>
-			<?php
-			foreach ( $critere_colum as $critere ) 
-			{?>
-				<td><a class="row-title"><?php echo $critere->Name ?></a></td>
-			<?php
-			}?>
-		</tr>
 		<?php
-		foreach ( $feedbacks as $feedback ){
-			$salle = $wpdb->get_var("SELECT Name FROM wp_system_recommandation_salles WHERE ID = '$feedback->id_salle'");
-			?>
-			<tr>
-			<td><?php echo $feedback->IP ?></td>
-			<td><?php echo $feedback->Date ?></td>
-			<td><?php echo $salle ?></td>
-			<?php
-			$changement_note = explode(";;", $feedback->Modifications);
-			$nb_changement = 0;
-			for($i=0;$i<count($critere_colum);$i++){
-				$poid = explode(";",$changement_note[$i]);
-				//Il n'y a pas eu de changement sur ce critère
-				if(count($poid) == 1){
-					?><td></td><?php
-				}else{
-					//On rajoute un + si c'est une note positive. Question d'esthétisme
-					$positif = explode("-",$poid[1]);
-					if (count($positif) == 1){
-						?><td>+<?php echo $poid[1] ?></td><?php
-					}else{
-						?><td><?php echo $poid[1] ?></td><?php
+		$feedbacks = $wpdb->get_results("SELECT ID,id_salle,Date,IP,Modifications FROM wp_system_recommandation_log_feedback_choix ");
+		?>
+		<div style="width:90%; height:200px; overflow:auto;">
+			<table style="width:90%;">
+				<tr>
+					<td><a class="row-title">IP </a></td>
+					<td><a class="row-title">Date </a></td>
+			    	<td><a class="row-title">Salle</a></td>
+					<?php
+					foreach ( $critere_colum as $critere ) 
+					{?>
+						<td><a class="row-title"><?php echo $critere->Name ?></a></td>
+					<?php
+					}?>
+				</tr>
+
+				<?php
+				//Pour chaque feedbacks on remplis le tableau
+				foreach ( $feedbacks as $feedback ){
+					$salle = $wpdb->get_var("SELECT Name FROM wp_system_recommandation_salles WHERE ID = '$feedback->id_salle'");
+					?>
+					<tr>
+					<td><?php echo $feedback->IP ?></td>
+					<td><?php echo $feedback->Date ?></td>
+					<td><?php echo $salle ?></td>
+					<?php
+					$changement_note = explode(";;", $feedback->Modifications);
+					$nb_changement = 0;
+					for($i=0;$i<count($critere_colum);$i++){
+						$poid = explode(";",$changement_note[$i]);
+						//Il n'y a pas eu de changement sur ce critère
+						if(count($poid) == 1){
+							?><td></td><?php
+						}else{
+							//On rajoute un + si c'est une note positive. Question d'esthétisme
+							$positif = explode("-",$poid[1]);
+							if (count($positif) == 1){
+								?><td>+<?php echo $poid[1] ?></td><?php
+							}else{
+								?><td><?php echo $poid[1] ?></td><?php
+							}
+							$nb_changement += 1;
+						}
+						
 					}
-					$nb_changement += 1;
-				}
-				
-			}
-			?>
-			<td><input type="submit"  class="button" value="Retirer la modification" onclick="Suppression_feedback_choix('<?php echo plugins_url();?>','<?php echo $feedback->ID?>')"></td>
-			</tr>
-			<?php
-		}?>
-    </table>  
-   </div>
+					?>
+					<td><input type="submit"  class="button" value="Retirer la modification" onclick="Suppression_feedback_choix('<?php echo plugins_url();?>','<?php echo $feedback->ID?>')"></td>
+					</tr>
+					<?php
+				}?>
+			</table>  
+		</div><br/>
 
-
-
-	<br/><a class="row-title">Gestion des feedbacks saisie de notes </a><br/>
-   <?php
-	$feedbacks = $wpdb->get_results("SELECT ID,id_salle,Date,IP,Modifications FROM wp_system_recommandation_log_feedback_saisienotes ");
-	?>
-   <div style="width:90%; height:200px; overflow:auto;">
-    <table style="width:90%;">
-    	<tr>
-			<td><a class="row-title">IP </a></td>
-			<td><a class="row-title">Date </a></td>
-		    <td><a class="row-title">Salle</a></td>
-			<?php
-			foreach ( $critere_colum as $critere ) 
-			{?>
-				<td><a class="row-title"><?php echo $critere->Name ?></a></td>
-			<?php
-			}?>
-		</tr>
+		<!-- Gestion des feedbacks suite à la saisie de notes -->
+		<a class="row-title">Gestion des feedbacks saisie de notes </a><br/>
 		<?php
-		foreach ( $feedbacks as $feedback ){
-			$salle = $wpdb->get_var("SELECT Name FROM wp_system_recommandation_salles WHERE ID = '$feedback->id_salle'");
-			?>
-			<tr>
-			<td><?php echo $feedback->IP ?></td>
-			<td><?php echo $feedback->Date ?></td>
-			<td><?php echo $salle ?></td>
-			<?php
-			$changement_note = explode(";;", $feedback->Modifications);
-			for($i=0;$i<count($critere_colum);$i++){
-				$poid = explode(";",$changement_note[$i]);
-				//Il n'y a pas eu de changement sur ce critère
-				if(count($poid) == 1){
-					?><td></td><?php
-				}else{
-					//On rajoute un + si c'est une note positive. Question d'esthétisme
-					$positif = explode("-",$poid[1]);
-					if (count($positif) == 1){
-						?><td>+<?php echo $poid[1] ?></td><?php
-					}else{
-						?><td><?php echo $poid[1] ?></td><?php
+		$feedbacks = $wpdb->get_results("SELECT ID,id_salle,Date,IP,Modifications FROM wp_system_recommandation_log_feedback_saisienotes ");
+		?>
+		<div style="width:90%; height:200px; overflow:auto;">
+			<table style="width:90%;">
+				<tr>
+					<td><a class="row-title">IP </a></td>
+					<td><a class="row-title">Date </a></td>
+				    <td><a class="row-title">Salle</a></td>
+					<?php
+					foreach ( $critere_colum as $critere ) 
+					{?>
+						<td><a class="row-title"><?php echo $critere->Name ?></a></td>
+					<?php
+					}?>
+				</tr>
+				<!-- Pour chaque feedback on remplis le tableau -->
+				<?php
+				foreach ( $feedbacks as $feedback ){
+					$salle = $wpdb->get_var("SELECT Name FROM wp_system_recommandation_salles WHERE ID = '$feedback->id_salle'");
+					?>
+					<tr>
+					<td><?php echo $feedback->IP ?></td>
+					<td><?php echo $feedback->Date ?></td>
+					<td><?php echo $salle ?></td>
+					<?php
+					$changement_note = explode(";;", $feedback->Modifications);
+					for($i=0;$i<count($critere_colum);$i++){
+						$poid = explode(";",$changement_note[$i]);
+						//Il n'y a pas eu de changement sur ce critère
+						if(count($poid) == 1){
+							?><td></td><?php
+						}else{
+							//On rajoute un + si c'est une note positive. Question d'esthétisme
+							$positif = explode("-",$poid[1]);
+							if (count($positif) == 1){
+								?><td>+<?php echo $poid[1] ?></td><?php
+							}else{
+								?><td><?php echo $poid[1] ?></td><?php
+							}
+						}	
 					}
-				}	
-			}
-			?>
-			<td><input type="submit"  class="button" value="Retirer la modification" onclick="Suppression_feedback_saisienotes('<?php echo plugins_url();?>','<?php echo $feedback->ID?>')"></td>
-			</tr>
-			<?php
-		}?>
-    </table>  
-   </div>
+					?>
+					<td><input type="submit"  class="button" value="Retirer la modification" onclick="Suppression_feedback_saisienotes('<?php echo plugins_url();?>','<?php echo $feedback->ID?>')"></td>
+					</tr>
+					<?php
+				}?>
+    		</table>  
+   		</div>
 
-   <?php
-   $coeff1 = $wpdb->get_var("SELECT increment_feedback_choix FROM wp_system_recommandation_configuration WHERE ID = 1");
-   $coeff2 = $wpdb->get_var("SELECT nb_max_feedback_choix_jour FROM wp_system_recommandation_configuration WHERE ID = 1");
-   $coeff3 = $wpdb->get_var("SELECT increment_feedback_saisienote FROM wp_system_recommandation_configuration WHERE ID = 1");
-   $coeff4 = $wpdb->get_var("SELECT nb_max_feedback_saisienote_jour FROM wp_system_recommandation_configuration WHERE ID = 1");
-   ?>
-	<table>
+   		<!-- Gestion des coefficients de modification des notes -->
+		<?php
+		$coeff1 = $wpdb->get_var("SELECT increment_feedback_choix FROM wp_system_recommandation_configuration WHERE ID = 1");
+		$coeff2 = $wpdb->get_var("SELECT nb_max_feedback_choix_jour FROM wp_system_recommandation_configuration WHERE ID = 1");
+		$coeff3 = $wpdb->get_var("SELECT increment_feedback_saisienote FROM wp_system_recommandation_configuration WHERE ID = 1");
+		$coeff4 = $wpdb->get_var("SELECT nb_max_feedback_saisienote_jour FROM wp_system_recommandation_configuration WHERE ID = 1");
+		?>
+		<table>
 			<tr>
 				<td>L'incrément du feedback choix d'une salle ? </td>
 				<td>Le nombre maximum de feedback choix par jours ? </td>
@@ -352,6 +358,7 @@ class configuration_plugin {
 			</tr>
 		</table>
 		<input type="submit"  class="button" value="Mettre à jours les coefficients" onclick="Maj_coefficients('<?php echo plugins_url();?>')">
+		
 		<?php
 	}
 }

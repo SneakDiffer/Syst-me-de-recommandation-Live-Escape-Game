@@ -1,5 +1,5 @@
 <?php
-
+	//Suppression d'un thème
 	require_once('../../../wp-config.php');
 	/* récupérer les paramètres de la requete */
 	/* "Theme" */

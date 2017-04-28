@@ -1,4 +1,5 @@
 <?php
+	//Modifie les coefficients de modification des notes
 	require_once('../../../wp-config.php');
 	/* récupérer les paramètres de la requete */
 	/* "coeff1;coeff2;coeff3;coeff4" */

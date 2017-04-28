@@ -1,4 +1,5 @@
 <?php
+	//Aout d'une nouvelle salle
 	require_once('../../../wp-config.php');
 	/* récupérer les paramètres de la requete */
 	/* "NomSalle;NoteCritère1;NoteCritère2 ....;Thème;Lien;" */

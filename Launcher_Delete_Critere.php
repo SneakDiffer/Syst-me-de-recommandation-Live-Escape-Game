@@ -1,4 +1,5 @@
 <?php
+	//Supprime un critère de la bdd
 	require_once('../../../wp-config.php');
 	/* récupérer les paramètres de la requete */
 	/* "Critere" */

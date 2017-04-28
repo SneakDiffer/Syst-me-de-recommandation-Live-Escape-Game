@@ -1,5 +1,5 @@
 function actualise() {
-  window.location.reload()
+  window.location.reload();
 }
 
 //Ajoute une nouvelle salle
@@ -41,12 +41,7 @@ function Gestion_Salle(path,ID_theme,theme){
 		// code for IE6, IE5
 		xhttp = new ActiveXObject("Microsoft.XMLHTTP");
 	}
-	//fonction synchrone
-	xhttp.onreadystatechange = function() {
-		//si la réponse est correcte 
-		if (this.readyState == 4 && this.status == 200) {actualise();}
-	};
-	
+	actualise();
 	xhttp.open("GET", requete, false);
 	xhttp.send();
 
@@ -72,6 +67,7 @@ function showCheckboxes(i) {
   }
 }
 
+//Modification des notes
 function Gestion_Note(path){
 	var xhttp;
 	if (window.XMLHttpRequest) {
@@ -102,6 +98,7 @@ function Gestion_Note(path){
 	}
 }
 
+//Modification des thèmes des salles
 function Gestion_Theme(path,theme){
 	/* créer la requete php : path + nomPlugin + nomFichier + parametre */
 	var xhttp;
@@ -136,10 +133,9 @@ function Gestion_Theme(path,theme){
 	    xhttp.open("GET", requete, false);
 		xhttp.send();
 	}
-	//alert("Les thèmes ont été modifiés");
 }
 
-
+//Modiciation des liens des salles
 function Gestion_Lien(path){
 	var xhttp;
 	if (window.XMLHttpRequest) {
@@ -160,7 +156,7 @@ function Gestion_Lien(path){
 	}
 }
 
-
+//Ajout d'un nouveau thème dans la base de donnée
 function Ajout_theme(path){
 	var theme = document.getElementById("Nouveau_theme").value;
 
@@ -178,6 +174,7 @@ function Ajout_theme(path){
 	xhttp.send();
 }
 
+//Suppression d'un thème
 function Suppression_theme(path){
 	var theme = document.getElementById("ListeGestionTheme").value;
 
@@ -195,7 +192,7 @@ function Suppression_theme(path){
 	xhttp.send();
 }
 
-
+//Suppression d'une salle
 function Suppression_Salle(path,nom_salle){
 
 	var xhttp;
@@ -212,6 +209,7 @@ function Suppression_Salle(path,nom_salle){
 	xhttp.send();
 }
 
+//Suppression d'un critère
 function Suppression_critere(path){
 	var critere = document.getElementById("ListeGestionCritere").value;
 
@@ -229,6 +227,7 @@ function Suppression_critere(path){
 	xhttp.send();
 }
 
+//Ajout d'un critère
 function Ajout_critere(path){
 	var critere = document.getElementById("Nouveau_Critere").value;
 	var xhttp;
@@ -245,6 +244,7 @@ function Ajout_critere(path){
 	xhttp.send();
 }
 
+//Suppression d'un feedback
 function Suppression_feedback_choix(path,ID){
 	var xhttp;
 	if (window.XMLHttpRequest) {
@@ -259,6 +259,7 @@ function Suppression_feedback_choix(path,ID){
 	xhttp.send();
 }
 
+//Suppression d'un feedback
 function Suppression_feedback_saisienotes(path,ID){
 	var xhttp;
 	if (window.XMLHttpRequest) {
@@ -273,7 +274,7 @@ function Suppression_feedback_saisienotes(path,ID){
 	xhttp.send();
 }
 
-
+//Mise à jours des coefficients de modification des notes
 function Maj_coefficients(path){
 	var coeff = "";
 	coeff += document.getElementById("increment_feedback_choix").value;

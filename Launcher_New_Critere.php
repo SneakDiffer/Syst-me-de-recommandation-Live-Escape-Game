@@ -1,4 +1,5 @@
 <?php
+	//Ajout d'un nouveau critère
 	require_once('../../../wp-config.php');
 	/* récupérer les paramètres de la requete */
 	/* "Critere" */
