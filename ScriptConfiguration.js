@@ -1,5 +1,23 @@
 function actualise() {
-  window.location.reload();
+	window.location.reload();
+}
+
+function reset_affichage()
+{
+	
+	//Récupération du nombre de lignes
+	var arrayLignes = document.getElementById("ID_table_configuration").rows;
+	var LenghtRows = arrayLignes.length;
+	//Récupération de la colonne d'ajout d'une salle
+	var LenghtColonnes = arrayLignes[LenghtRows-1].cells.length;
+	//Récupération des input texte
+	var input="";
+	for(i = 0; i < LenghtColonnes; i++){
+		document.getElementById("Ajout_Salle"+i).innerHTML = "";
+	}
+	document.getElementById("Nouveau_theme").innerHTML = "";
+	document.getElementById("Nouveau_Critere").innerHTML = "";
+	
 }
 
 //Ajoute une nouvelle salle
@@ -41,10 +59,9 @@ function Gestion_Salle(path,ID_theme,theme){
 		// code for IE6, IE5
 		xhttp = new ActiveXObject("Microsoft.XMLHTTP");
 	}
-	actualise();
 	xhttp.open("GET", requete, false);
 	xhttp.send();
-
+	actualise();
 }
 
 
@@ -167,11 +184,16 @@ function Ajout_theme(path){
 		// code for IE6, IE5
 		xhttp = new ActiveXObject("Microsoft.XMLHTTP");
 	}
-
+	xhttp.onreadystatechange = function() {
+		/* si la réponse est correcte */
+		if (this.readyState == 4 && this.status == 200) {
+			actualise(); 
+		}
+	};
 	var requete = path + "/Systeme-de-recommandation-de-Live-Escape-Game/Launcher_New_Theme.php?q=" + theme;
-	actualise();
-	xhttp.open("GET", requete, false);
+	xhttp.open("GET", requete, true);
 	xhttp.send();
+	
 }
 
 //Suppression d'un thème
@@ -185,10 +207,14 @@ function Suppression_theme(path){
 		// code for IE6, IE5
 		xhttp = new ActiveXObject("Microsoft.XMLHTTP");
 	}
-
+	xhttp.onreadystatechange = function() {
+		/* si la réponse est correcte */
+		if (this.readyState == 4 && this.status == 200) {
+			actualise(); 
+		}
+	};
 	var requete = path + "/Systeme-de-recommandation-de-Live-Escape-Game/Launcher_Delete_Theme.php?q=" + theme;
-	actualise();
-	xhttp.open("GET", requete, false);
+	xhttp.open("GET", requete, true);
 	xhttp.send();
 }
 
@@ -204,9 +230,9 @@ function Suppression_Salle(path,nom_salle){
 	}
 
 	var requete = path + "/Systeme-de-recommandation-de-Live-Escape-Game/Launcher_Delete_Salle.php?q=" + nom_salle;
-	actualise();
 	xhttp.open("GET", requete, false);
 	xhttp.send();
+	actualise();
 }
 
 //Suppression d'un critère
@@ -222,9 +248,9 @@ function Suppression_critere(path){
 	}
 
 	var requete = path + "/Systeme-de-recommandation-de-Live-Escape-Game/Launcher_Delete_Critere.php?q=" + critere;
-	actualise();
 	xhttp.open("GET", requete, false);
 	xhttp.send();
+	actualise();
 }
 
 //Ajout d'un critère
@@ -239,9 +265,9 @@ function Ajout_critere(path){
 	}
 
 	var requete = path + "/Systeme-de-recommandation-de-Live-Escape-Game/Launcher_New_Critere.php?q=" + critere;
-	actualise();
 	xhttp.open("GET", requete, false);
 	xhttp.send();
+	actualise();
 }
 
 //Suppression d'un feedback
@@ -254,9 +280,9 @@ function Suppression_feedback_choix(path,ID){
 		xhttp = new ActiveXObject("Microsoft.XMLHTTP");
 	}
 	var requete = path + "/Systeme-de-recommandation-de-Live-Escape-Game/Launcher_Delete_Feedback_choix.php?q=" + ID;
-	actualise();
 	xhttp.open("GET", requete, false);
 	xhttp.send();
+	actualise();
 }
 
 //Suppression d'un feedback
@@ -269,9 +295,9 @@ function Suppression_feedback_saisienotes(path,ID){
 		xhttp = new ActiveXObject("Microsoft.XMLHTTP");
 	}
 	var requete = path + "/Systeme-de-recommandation-de-Live-Escape-Game/Launcher_Delete_Feedback_saisienotes.php?q=" + ID;
-	actualise();
 	xhttp.open("GET", requete, false);
 	xhttp.send();
+	actualise();
 }
 
 //Mise à jours des coefficients de modification des notes
@@ -290,7 +316,7 @@ function Maj_coefficients(path){
 		xhttp = new ActiveXObject("Microsoft.XMLHTTP");
 	}
 	var requete = path + "/Systeme-de-recommandation-de-Live-Escape-Game/Launcher_Coefficients.php?q=" + coeff;
-	actualise();
 	xhttp.open("GET", requete, false);
 	xhttp.send();
+	actualise();
 }
