@@ -348,7 +348,7 @@ class configuration_plugin {
 				<td>L'incrément du feedback choix d'une salle ? </td>
 				<td>Le nombre maximum de feedback choix par jours ? </td>
 				<td>L'incrément du feedback saisie de note ? </td>
-				<td>Le nombre maximum de feedback saise de note par jours ? </td>
+				<td>Le nombre maximum de feedback saisie de note par jours ? </td>
 			</tr>
 			<tr>
 				<td><input type="text" id="increment_feedback_choix" value='<?php echo $coeff1 ?>'></td>
