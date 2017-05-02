@@ -4,7 +4,7 @@
 	/* récupérer les paramètres de la requete */
 	/* "NomSalle;NoteCritère1;NoteCritère2 ....;Thème;Lien;" */
 	$q = $_REQUEST["q"];
-	$param = explode("/", $q);
+	$param = explode(":SEP:", $q);
 	$input_text = explode(";", $param[0]);
 
 	global $wpdb;

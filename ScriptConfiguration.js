@@ -48,7 +48,7 @@ function Gestion_Salle(path,ID_theme,theme){
 	if(ListeTheme.length != 0){
 		ListeTheme = ListeTheme.substring(0, ListeTheme.length-1);
 	}
-	input += "/" + ListeTheme;
+	input += ":SEP:" + ListeTheme;
 	/* créer la requete php : path + nomPlugin + nomFichier + parametre */
 	var requete = path + "/Systeme-de-recommandation-de-Live-Escape-Game/Launcher_Salle.php?q=" + input;
 

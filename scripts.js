@@ -248,9 +248,23 @@ function unset_choix_Salle() {
 	document.getElementById("selected_salle").innerHTML = "" ;
 }
 
-
-
-
 function show_range_value(id_range, id_show) {
-	document.getElementById(id_show).innerHTML = document.getElementById(id_range).value;
+  var val = document.getElementById(id_range).value;
+  var value = val.toString();
+  var res = "";
+  /* si val est inférieur à  10 */
+  if (parseFloat(val) < 10) {
+    /* ajouter un 0 devant */
+    res = "0";
+  }
+  /* si val est un entier autre que 100 */
+  if (parseInt(val) == parseFloat(val) && parseFloat(val) != 100) {
+    res = res + value + ".0";
+  } else {
+    res = res + value;
+  }
+  if (parseFloat(val) == 100) {
+    res = res + "&nbsp;";
+  }
+  document.getElementById(id_show).innerHTML = res;
 }

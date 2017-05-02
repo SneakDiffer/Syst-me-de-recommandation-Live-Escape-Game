@@ -4,6 +4,13 @@
 		public function __construct()
 		{
 			parent::__construct('ID_FeedBack_widget','FeedBack_widget',array('description' => 'Un widget de Feed Back utilisateur'));
+			// get the plugin path
+			$path = plugins_url();
+			// then the full path to the scripts and styles file 
+			$path_to_scripts = $path . "/Systeme-de-recommandation-de-Live-Escape-Game/scripts.js";
+			  
+			// add the custom scripts and styles to the widget  
+			wp_enqueue_script('scripts.js', $path_to_scripts);
 		}
 
 		public function widget($args,$instance)
@@ -12,7 +19,6 @@
 			//Display all the room on the widget
 			?>
 			<html>
-			<script type="text/javascript" src="/scripts.js"></script>
 				<div class="tooltip">Aide
   					<span class="tooltiptext">- Selectionnez une salle <br>- Renseigner les notes<br>- Renseignez votre expertise<br>- Valider le formulaire de saisie de note</span>
 				</div>
@@ -36,7 +42,7 @@
 				<p id="selected_salle"></p>
 				<table id="tab_saisieNote" style="width:100%">
 					<tr>
-						<td><label>Critères </label></td>
+						<td><B>Critères </B></td>
  						<td style="text-align:left">Pas important</td>
  						<td style="text-align:right">Important</td>
  						<td></td>
@@ -50,9 +56,9 @@
 						{
 							?>
 							<tr>
-								<td><label><?php echo $row->Name ?></label></td>
+								<td><B><?php echo $row->Name ?></B></td>
 		                		<td colspan="2"><input type="range" style="width:90%" id="<?php echo $i ?>IDsaisieNote" value="50" min="1" max="100" step ="0.1" oninput="show_range_value('<?php echo $i ?>IDsaisieNote', '<?php echo $i ?>_2_value')"></input> </td>
-		                		<td id="<?php echo $i ?>_2_value" style="text-align:right">50</td>
+		                		<td id="<?php echo $i ?>_2_value" style="text-align:right">50.0</td>
 		                   </tr>
 		                   <?php
 		                   $i += 1;
@@ -60,11 +66,11 @@
 						?>
     			</table>
     			<table id="tab_expertise_2" style="width:100%">
-    				<tr><td><label>Expertise</label></td><td style="text-align:left">Faible</td><td style="text-align:right">Elevée</td><td></td></tr>
+    				<tr><td><B>Expertise</B></td><td style="text-align:left">Faible</td><td style="text-align:right">Elevée</td><td></td></tr>
 					<tr>
-						<td><label>Expertise</label></td>
+						<td><B>Expertise</B></td>
 						<td colspan="2"><input type="range" style="width:90%" id="id_expertise_2" value="50" min="1" max="100" step ="0.1" oninput="show_range_value('id_expertise_2', 'expertise_2_value')"></input></td>
-						<td id="expertise_2_value" style="text-align:right">50</td>
+						<td id="expertise_2_value" style="text-align:right">50.0</td>
 					</tr>   				
     			</table>
     			<input type="submit" style="text-align:center" value="Envoyer le formulaire" onclick="launch_amas_feedback_saisieNotes('<?php echo plugins_url();?>')"/>
