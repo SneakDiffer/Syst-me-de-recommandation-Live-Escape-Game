@@ -125,6 +125,7 @@ class configuration_plugin {
 				<?php
 				$i += 1;//Salle suivante
 			}
+			$ID_nouvelle_salle = $i;
 		   	?>
 		   	<!-- Ligne pour ajouter une salle -->
 		   	<tr>
@@ -135,13 +136,13 @@ class configuration_plugin {
 		   			if($i == count($critere_colum) + 1){
 		   				?>
 		   				<td>
-		   					<div class="selectBox" onclick="showCheckboxes('<?php echo $i?>')">
+		   					<div class="selectBox" onclick="showCheckboxes('<?php echo $ID_nouvelle_salle?>')">
 						      <select>
 						        <option>Gestion des thèmes</option>
 						      </select>
 						      <div class="overSelect" ></div>
 						      </div>
-						    <div id="checkboxes<?php echo $i ?>" style="display: none;">
+						    <div id="checkboxes<?php echo $ID_nouvelle_salle ?>" style="display: none;">
 						    	<?php
 						    	$j = 0;
 		                        foreach ($All_Theme as $themes) {
