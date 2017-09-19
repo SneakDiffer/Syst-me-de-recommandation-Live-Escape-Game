@@ -1,0 +1,230 @@
+#tab_critere table, #tab_critere th, #tab_critere tr {
+    width:100%;
+    border-bottom: 1px solid #ddd;
+}
+#tab_critere td {
+    vertical-align:middle;
+}
+#tab_critere tr:hover {
+    background-color: #f5f5f5
+}
+
+#tab_saisieNote table, #tab_saisieNote th, #tab_saisieNote tr {
+    width:100%;
+    border-bottom: 1px solid #ddd;
+}
+#tab_saisieNote td {
+    vertical-align:middle;
+}
+#tab_saisieNote tr:hover {
+    background-color: #f5f5f5
+}
+
+#tab_expertise table, #tab_expertise th, #tab_expertise tr {
+    width:100%;
+    border-bottom: 1px solid #ddd;
+}
+#tab_expertise td {
+    vertical-align:middle;
+}
+#tab_expertise tr:hover {
+    background-color: #f5f5f5
+}
+
+#tab_expertise_2 table, #tab_expertise_2 th, #tab_expertise_2 tr {
+    width:100%;
+    border-bottom: 1px solid #ddd;
+}
+#tab_expertise_2 td {
+    vertical-align:middle;
+}
+#tab_expertise_2 tr:hover {
+    background-color: #f5f5f5
+}
+
+#tab_res table, #tab_res th, #tab_res tr, #tab_res td {
+    width:100%;
+    border-bottom: 1px solid #ddd;
+}
+#tab_res td {
+    vertical-align:middle;
+}
+#tab_res tr:hover {
+    background-color: #f5f5f5
+}
+
+.multiselect {
+    width:100%;
+}
+
+.selectBox {
+    position: relative;
+}
+
+.selectBox select {
+    width:100%;
+    font-weight: bold;
+}
+
+.overSelect {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+}
+
+#checkboxes {
+    display: none;
+    border: 1px #dadada solid;
+}
+
+#checkboxes label {
+    display: block;
+}
+
+#checkboxes label:hover {
+    background-color: #1e90ff;
+}
+
+input[type=range] {
+    -webkit-appearance: none;
+
+    padding: 8px 5px;
+    background: transparent;
+    transition: border 0.2s linear, box-shadow 0.2s linear;
+    width: 90%;
+}
+
+input[type=range]:active {
+  border-color: rgba(82, 168, 236, 0.8);
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(82, 168, 236, 0.6);
+}
+
+input[type=range]:focus {
+  outline: none;
+}
+
+input[type=range]::-webkit-slider-runnable-track {
+    width: 90%;
+    height: 5px;
+    background: #4990ff;
+    border: none;
+    border-radius: 10px;
+}
+
+
+input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    border: none;
+    display: block;
+    height: 16px;
+    width: 16px;
+    border-radius: 50%;
+    border: 1px solid #ddd;
+    background: #fafafa;
+    cursor: pointer;
+    margin-top: -5px;
+}
+input[type=range]::-webkit-slider-thumb:hover {
+  background-position: 50% 50%;
+}
+
+input[type=range]:focus::-webkit-slider-runnable-track {
+    background: #4990ff;
+}
+
+input[type=range]::-moz-range-track {
+    width: 90%;
+    height: 5px;
+    background: #4990ff;
+    border: none;
+    border-radius: 3px;
+}
+input[type=range]::-moz-range-thumb {
+    border: none;
+    display: block;
+    height: 16px;
+    width: 16px;
+    border-radius: 50%;
+    border: 1px solid #ddd;
+    background: #fafafa;
+    cursor: pointer;
+    margin-top: -5px;
+}
+
+/*hide the outline behind the border*/
+input[type=range]:-moz-focusring {
+    outline: 1px solid white;
+    outline-offset: -1px;
+}
+
+input[type=range]::-ms-track {
+    width: 90%;
+    height: 5px;
+    background: transparent; 
+    border-color: transparent;
+    border-width: 7px 0;
+    color: transparent;
+}
+input[type=range]::-ms-fill-lower {
+    background:  #5bc0de;
+    border-radius: 10px;
+}
+input[type=range]::-ms-fill-upper {
+    background:  #5bc0de;
+    border-radius: 10px;
+}
+input[type=range]::-ms-thumb {
+    border: none;
+    height: 16px;
+    width: 16px;
+    border-radius: 50%;
+    border: 1px solid #ddd;
+    background: #fafafa;
+}
+
+
+
+ /* Tooltip container */
+.tooltip {
+    position: relative;
+    display: inline-block;
+    border-bottom: 1px dotted black; 
+}
+
+/* Tooltip text */
+.tooltip .tooltiptext {
+    visibility: hidden;
+    width: 120px;
+    background-color: #555;
+    color: #fff;
+    text-align: left;
+    padding: 5px 0;
+    border-radius: 6px;
+    position: absolute;
+    z-index: 1;
+    bottom: 125%;
+    left: 50%;
+    margin-left: -60px;
+    opacity: 0;
+    transition: opacity 1s;
+}
+
+/* Tooltip arrow */
+.tooltip .tooltiptext::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #555 transparent transparent transparent;
+}
+
+/* Show the tooltip text when you mouse over the tooltip container */
+.tooltip:hover .tooltiptext {
+    visibility: visible;
+    opacity: 1;
+}
